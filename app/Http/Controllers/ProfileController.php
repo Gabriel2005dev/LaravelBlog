@@ -26,16 +26,19 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->fill($request->validated());
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+            
 
     /**
      * Delete the user's account.
@@ -57,4 +60,22 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function updateAvatar(Request $request)
+{
+    $request->validate([
+        'avatar' => ['required', 'image', 'max:2048'],
+    ]);
+
+    $user = $request->user();
+
+    $path = $request->file('avatar')->store('avatars', 'public');
+
+    $user->avatar = $path;
+    $user->save();
+
+    return response()->json([
+        'path' => asset('storage/' . $path)
+    ]);
+}
 }

@@ -13,19 +13,68 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <!-- FORM PRINCIPAL -->
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
+        <!-- AVATAR -->
+         <div class="flex justify-center mb-6">
+    <div class="relative w-24 h-24">
+
+        <!-- imagem -->
+        <img
+            id="avatarImg"
+            src="{{ $user->avatar 
+                ? asset('storage/' . $user->avatar) 
+                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+            class="w-24 h-24 rounded-full object-cover border"
+        >
+
+        <!-- upload -->
+        <label class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 rounded-full cursor-pointer transition">
+
+            <input type="file" id="avatarInput" class="hidden">
+
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536M9 11l6 6m2-2L9 11m0 0L5 15m4-4l6-6" />
+            </svg>
+
+        </label>
+
+    </div>
+</div>
+     
+
+        <!-- NAME -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input
+                id="name"
+                name="name"
+                type="text"
+                class="mt-1 block w-full"
+                :value="old('name', $user->name)"
+                required
+                autofocus
+                autocomplete="name"
+            />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
+        <!-- EMAIL -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input
+                id="email"
+                name="email"
+                type="email"
+                class="mt-1 block w-full"
+                :value="old('email', $user->email)"
+                required
+                autocomplete="username"
+            />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -33,7 +82,10 @@
                     <p class="text-sm mt-2 text-gray-800">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button
+                            form="send-verification"
+                            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
@@ -47,6 +99,7 @@
             @endif
         </div>
 
+        <!-- BOTÃO -->
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
@@ -57,8 +110,59 @@
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                >
+                    {{ __('Saved.') }}
+                </p>
             @endif
         </div>
     </form>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const input = document.querySelector('#avatarInput');
+    const img = document.querySelector('#avatarImg');
+    const navImg = document.querySelector('#navAvatar'); // 👈 navigation
+
+    if (!input || !img) return;
+
+    input.addEventListener('change', async (e) => {
+
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('avatar', file);
+        formData.append('_token', '{{ csrf_token() }}');
+
+        try {
+            const response = await fetch("{{ route('profile.avatar') }}", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.path) {
+
+                const newUrl = data.path + '?t=' + Date.now();
+
+                // 🔥 atualiza PROFILE
+                img.src = newUrl;
+
+                // 🔥 atualiza NAVIGATION
+                if (navImg) {
+                    navImg.src = newUrl;
+                }
+            }
+
+        } catch (error) {
+            console.error('Erro upload avatar:', error);
+        }
+
+    });
+
+});
+</script>

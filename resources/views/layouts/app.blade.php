@@ -15,6 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
@@ -32,5 +33,16 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('user', {
+                avatar: @js(Auth::user()->avatar 
+                    ? asset('storage/' . Auth::user()->avatar)
+                    : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name)
+                )
+            })
+        })
+        </script>       
+
     </body>
 </html>
