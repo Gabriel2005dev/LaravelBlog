@@ -25,12 +25,8 @@
         <div class="hidden sm:flex sm:items-center sm:ms-6">
             <x-dropdown align="right" width="full">
                 <x-slot name="trigger">
-                        <img
-                        id="navAvatar"
-                        src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
-                        class="w-9 h-9 rounded-full object-cover border"
-                    />
-                                    </x-slot>
+                      <x-user-avatar :user="Auth::user()" id="navAvatar" />
+                </x-slot>
 
                 <x-slot name="content">
 

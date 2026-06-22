@@ -19,29 +19,11 @@
         @method('patch')
 
         <!-- AVATAR -->
-         <div class="flex justify-center mb-6">
+<div class="flex justify-center mb-6">
     <div class="relative w-24 h-24">
 
         <!-- imagem -->
-        <img
-            id="avatarImg"
-            src="{{ $user->avatar 
-                ? asset('storage/' . $user->avatar) 
-                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
-            class="w-24 h-24 rounded-full object-cover border"
-        >
-
-        <!-- upload -->
-        <label class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 rounded-full cursor-pointer transition">
-
-            <input type="file" id="avatarInput" class="hidden">
-
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15.232 5.232l3.536 3.536M9 11l6 6m2-2L9 11m0 0L5 15m4-4l6-6" />
-            </svg>
-
-        </label>
+            <x-profile-avatar-uploader :user="$user" />
 
     </div>
 </div>

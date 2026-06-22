@@ -36,9 +36,11 @@
         <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('user', {
-                avatar: @js(Auth::user()->avatar 
-                    ? asset('storage/' . Auth::user()->avatar)
-                    : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name)
+                   avatar: @js(Auth::check()
+                    ? (Auth::user()->avatar
+                        ? asset('storage/' . Auth::user()->avatar)
+                        : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name))
+                    : null
                 )
             })
         })
