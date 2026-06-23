@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
+
+class PostController extends Controller
+{
+    public function index(): View
+    {
+        $posts = Post::with('user')->withCount('comments')->latest()->paginate(10);
+
+        return view('feed.index', compact('posts'));
+    }
+
+    public function create(): View
+    {
+        return view('posts.create');
+    }
+
+    public function store(StorePostRequest $request): RedirectResponse
+    {
+        $post = $request->user()->posts()->create([
+            ...$request->validated(),
+            'slug' => $this->uniqueSlug($request->string('title')->toString()),
+        ]);
+
+        return redirect()->route('posts.show', $post)->with('status', 'Publicação criada com sucesso.');
+    }
+
+    public function show(Post $post): View
+    {
+        $post->load(['user', 'comments.user']);
+
+        return view('posts.show', compact('post'));
+    }
+
+    public function edit(Post $post): View
+    {
+        $this->authorize('update', $post);
+
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(UpdatePostRequest $request, Post $post): RedirectResponse
+    {
+        $post->update([
+            ...$request->validated(),
+            'slug' => $this->uniqueSlug($request->string('title')->toString(), $post),
+        ]);
+
+        return redirect()->route('posts.show', $post)->with('status', 'Publicação atualizada com sucesso.');
+    }
+
+    public function destroy(Post $post): RedirectResponse
+    {
+        $this->authorize('delete', $post);
+        $post->delete();
+
+        return redirect()->route('feed')->with('status', 'Publicação excluída com sucesso.');
+    }
+
+    private function uniqueSlug(string $title, ?Post $ignore = null): string
+    {
+        $base = Str::slug($title) ?: 'post';
+        $slug = $base;
+        $counter = 2;
+
+        while (Post::where('slug', $slug)->when($ignore, fn ($query) => $query->whereKeyNot($ignore))->exists()) {
+            $slug = $base.'-'.$counter++;
+        }
+
+        return $slug;
+    }
+}
