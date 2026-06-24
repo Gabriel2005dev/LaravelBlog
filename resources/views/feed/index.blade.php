@@ -1,10 +1,50 @@
 <x-app-layout>
     <x-slot name="header">
-         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Feed</h2>
-            <a href="{{ route('posts.create') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Novo post</a>
+    <div class="flex items-center justify-between">
+
+        <!-- Lado Esquerdo -->
+        <div class="flex items-center gap-16">
+
+            <!-- Bloco de ações -->
+            <div class="flex items-center gap-4">
+
+                <button class="text-gray-500 hover:text-red-500 transition">
+                    <x-lucide-heart class="w-6 h-6" />
+                </button>
+
+                <button class="text-gray-500 hover:text-yellow-500 transition">
+                    <x-lucide-bookmark class="w-6 h-6" />
+                </button>
+
+                <button class="text-gray-500 hover:text-green-500 transition">
+                    <x-lucide-share-2 class="w-6 h-6" />
+                </button>
+
+            </div>
+
         </div>
-    </x-slot>
+
+        <!-- Lado Direito -->
+        <div class="flex items-center gap-4">
+
+            <button class="relative text-gray-500 hover:text-indigo-600 transition">
+                <x-lucide-bell class="w-5 h-5" />
+
+                <!-- Badge de exemplo -->
+                <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+
+            <a href="{{ route('posts.create') }}"
+               class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+
+                <x-lucide-square-pen class="w-4 h-4" />
+                Novo Post
+            </a>
+
+        </div>
+
+    </div>
+</x-slot>
 
     <div class="py-12">
             <div class="max-w-4xl mx-auto space-y-6 sm:px-6 lg:px-8">

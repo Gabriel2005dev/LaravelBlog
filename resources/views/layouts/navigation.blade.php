@@ -29,24 +29,39 @@
                 </x-slot>
 
                 <x-slot name="content">
+                    <div class="px-2 py-2 border-b flex items-center gap-3">
 
-                    <div class="px-4 py-2 border-b">
-                        <p class="text-sm font-semibold">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
-                    </div>
+                        <div class="shrink-0">
+                            <x-user-avatar :user="Auth::user()" id="navAvatar" size="w-8 h-8" />
+                        </div>
 
+                        <div class="min-w-0">
+                            <p class="text-xs font-semibold">
+                                {{ Auth::user()->name }}
+                            </p>
+
+                            <p class="text-2xs text-gray-500 truncate">
+                                {{ Auth::user()->email }}
+                            </p>
+                        </div>
+                   </div>
 
                     <x-dropdown-link :href="route('profile.edit')">
-                        Perfil
+                        <div class="flex items-center gap-2">
+                            <x-lucide-user class="w-4 h-4 text-gray-700" />
+                            <span>Perfil</span>
+                        </div>
                     </x-dropdown-link>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
-                        <x-dropdown-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                            this.closest('form').submit();">
-                            Sair
+                       <x-dropdown-link :href="route('logout')"
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                            <div class="flex items-center gap-2">
+                                <x-lucide-log-out class="w-4 h-4 text-gray-700" />
+                                <span>Sair</span>
+                            </div>
                         </x-dropdown-link>
 
                     </form>
