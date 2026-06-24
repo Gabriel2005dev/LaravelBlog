@@ -14,5 +14,10 @@
 
 <div class="mt-6 flex items-center gap-4">
     <x-primary-button>{{ $buttonText }}</x-primary-button>
-    <a href="{{ url()->previous() }}" class="text-sm text-gray-600 hover:text-gray-900">Cancelar</a>
+      @if (! ($inline ?? false))
+        <a href="{{ url()->previous() }}" class="text-sm text-gray-600 hover:text-gray-900">Cancelar</a>
+    @else
+        <button type="button" @click="editing = false" class="text-sm text-gray-600 hover:text-gray-900">Cancelar</button>
+    @endif
+  
 </div>

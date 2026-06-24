@@ -13,9 +13,46 @@ class PostController extends Controller
 {
     public function index(): View
     {
-        $posts = Post::with('user')->withCount('comments')->latest()->paginate(10);
+        $posts = Post::with(['user', 'comments.user'])
+        ->withCount(['comments', 'likedByUsers as likes_count'])
+        ->withExists([
+            'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+            'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+        ])
+        ->latest()
+        ->paginate(10);
 
         return view('feed.index', compact('posts'));
+    }
+
+        public function liked(): View
+    {
+        $posts = request()->user()->likedPosts()
+            ->with(['user', 'comments.user'])
+            ->withCount(['comments', 'likedByUsers as likes_count'])
+            ->withExists([
+                'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+                'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+            ])
+            ->latest('post_likes.created_at')
+            ->paginate(10);
+
+        return view('feed.index', ['posts' => $posts, 'title' => 'Posts curtidos']);
+    }
+
+    public function saved(): View
+    {
+        $posts = request()->user()->savedPosts()
+            ->with(['user', 'comments.user'])
+            ->withCount(['comments', 'likedByUsers as likes_count'])
+            ->withExists([
+                'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+                'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+            ])
+            ->latest('saved_posts.created_at')
+            ->paginate(10);
+
+        return view('feed.index', ['posts' => $posts, 'title' => 'Posts salvos']);
     }
 
     public function create(): View
@@ -35,7 +72,13 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        $post->load(['user', 'comments.user']);
+        $post->load(['user', 'comments.user'])
+        ->loadCount(['comments', 'likedByUsers as likes_count'])
+        ->loadExists([
+            'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+            'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+        ]);
+
 
         return view('posts.show', compact('post'));
     }

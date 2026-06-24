@@ -24,6 +24,19 @@ class PostCrudTest extends TestCase
         $this->assertDatabaseHas('posts', ['title' => 'Meu primeiro post', 'user_id' => $user->id]);
     }
 
+    
+    public function test_author_can_update_post(): void
+    {
+        $post = Post::factory()->create();
+
+        $this->actingAs($post->user)->patch(route('posts.update', $post), [
+            'title' => 'Título atualizado',
+            'body' => 'Conteúdo atualizado pelo autor.',
+        ])->assertRedirect(route('posts.show', $post));
+
+        $this->assertDatabaseHas('posts', ['id' => $post->id, 'title' => 'Título atualizado']);
+    }
+
     public function test_only_author_can_update_post(): void
     {
         $post = Post::factory()->create();

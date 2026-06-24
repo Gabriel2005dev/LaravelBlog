@@ -24,6 +24,23 @@ class CommentTest extends TestCase
         $this->assertDatabaseHas('comments', ['post_id' => $post->id, 'user_id' => $user->id]);
     }
 
+        public function test_non_author_cannot_delete_comment_unless_post_author(): void
+    {
+        $comment = Comment::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $this->actingAs($otherUser)->delete(route('comments.destroy', $comment))->assertForbidden();
+        $this->assertDatabaseHas('comments', ['id' => $comment->id]);
+    }
+
+    public function test_post_author_can_delete_comment_on_their_post(): void
+    {
+        $comment = Comment::factory()->create();
+
+        $this->actingAs($comment->post->user)->delete(route('comments.destroy', $comment))->assertRedirect();
+        $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
+    }
+
     public function test_comment_author_can_delete_comment(): void
     {
         $comment = Comment::factory()->create();
