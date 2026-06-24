@@ -1,7 +1,7 @@
 <x-app-layout>
 
         <x-slot name="header">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between ">
             <div class="flex items-center gap-3">
                 <a href="{{ route('posts.liked.index') }}" class="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold {{ request()->routeIs('posts.liked.index') ? 'bg-red-50 text-red-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
                     <x-lucide-heart class="h-5 w-5" /> Curtidos
@@ -21,27 +21,22 @@
                 </div>
             </div>
 
-            <a href="{{ route('posts.create') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">
+            <a href="{{ route('posts.create') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">
                 <x-lucide-badge-plus class="h-5 w-5" /> Novo Post
             </a>
         </div>
     </x-slot>
 
         <div id="feed" class="py-8">
-        <div class="mx-auto max-w-3xl space-y-5 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between px-1">
-                <h1 class="text-2xl font-bold text-gray-900">{{ $title ?? 'Feed' }}</h1>
-                <p class="text-sm text-gray-500">Interações inline, sem sair da página.</p>
-            </div>
-
+        <div class="mx-auto max-w-6xl space-y-5">
             @if (session('status'))
-                <div class="rounded-xl bg-green-50 p-4 text-sm text-green-700">{{ session('status') }}</div>
+                <div class="rounded-full bg-green-50 p-4 text-sm text-green-700">{{ session('status') }}</div>
             @endif  
                 </article>
             @forelse ($posts as $post)
                 @include('posts.partials.card', ['post' => $post])
             @empty
-                <div class="rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-gray-100">
+                <div class="rounded-full bg-white p-8 text-center shadow-sm ring-1 ring-gray-100">
                     <h3 class="text-lg font-semibold text-gray-900">Nenhum post encontrado</h3>
                     <p class="mt-2 text-gray-600">Compartilhe uma publicação ou explore o feed do LaravelBlog.</p>
                 </div>
