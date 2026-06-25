@@ -16,13 +16,19 @@
     </head>
     <body class="font-sans antialiased">
 
-        <div class="min-h-screen bg-gray-100">
+        <div
+             x-data="{
+            commentsDrawer: false,
+            selectedPost: null
+        }"
+        class="min-h-screen bg-gray-100">
+
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="max-w-6xl mx-auto bg-white shadow m-2 rounded-4xl">
-                    <div class="max-w-6xl mx-auto py-2 px-4">
+                <header class="max-w-6xl mx-auto bg-white shadow m-3 rounded-4xl">
+                    <div class="p-4">
                         {{ $header }}
                     </div>
                 </header>
