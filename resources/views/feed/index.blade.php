@@ -17,12 +17,12 @@
                 <div class="flex-1 lg:max-w-md">
                 <div class="relative">
                     <x-lucide-search class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Pesquisar posts..." class="w-full rounded-full border-gray-300 py-3 pl-10 pr-4 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <input type="text" placeholder="Pesquisar posts..." class="w-full rounded-full border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
             </div>
 
-            <a href="{{ route('posts.create') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">
-                <x-lucide-badge-plus class="h-5 w-5" /> Novo Post
+            <a href="{{ route('posts.create') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">
+                <x-lucide-badge-plus class="h-5 w-5" /> Novo
             </a>
         </div>
     </x-slot>

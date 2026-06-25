@@ -17,6 +17,11 @@ export default {
               fontSize: {
                 '2xs': '10px',
             },
+            borderRadius: {
+                '4xl': '2rem',      // 32px
+                '5xl': '2.5rem',    // 40px
+                '6xl': '3rem',      // 48px
+            },
         },
     },
 
