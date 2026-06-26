@@ -42,7 +42,7 @@ x-data="{
             <div class="justify-center min-w-0 flex flex-col">
 
                 <a href="{{ route('posts.show', $post) }}"
-                class="text-lg font-bold text-gray-900 hover:text-indigo-600 transition truncate">
+                class="text-md font-bold text-gray-900 hover:text-indigo-600 transition truncate">
                     @if(auth()->id() === $post->user_id)
                         <span class="bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] bg-clip-text text-transparent font-bold">
                             Você
@@ -52,7 +52,7 @@ x-data="{
                     @endif
                 </a>
 
-                <span class="text-sm text-gray-400 mt-0.5">
+                <span class="text-xs text-gray-400 mt-0.5">
                     {{ $post->created_at->diffForHumans() }}
                 </span>
 
@@ -98,9 +98,11 @@ x-data="{
             {{ $post->title }}
         </a>
 
-        <p class="text-sm  text-gray-600">
-            {{ $expanded ? $post->body : \Illuminate\Support\Str::limit($post->body, 1000) }}
+        <p class="text-sm text-gray-600 whitespace-pre-line">
+            {{ $expanded ? $post->body : \Illuminate\Support\Str::limit($post->body, 1500) }}
         </p>
+
+       
 
         @can('update', $post)
             <form

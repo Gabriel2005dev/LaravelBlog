@@ -50,7 +50,27 @@
                 )
             })
         })
-        </script>       
+        </script>]
+        <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('comments', {
+                open: false,
+                postId: null,
+
+                open(id) {
+                    this.postId = id
+                    this.open = true
+                },
+
+                close() {
+                    this.open = false
+                    this.postId = null
+                }
+            })
+        })
+        </script>
+
+        
 
     </body>
 </html>

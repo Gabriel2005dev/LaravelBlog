@@ -15,4 +15,6 @@
             @include('posts.partials.card', ['post' => $post, 'expanded' => true])
         </div>
     </div>
+    
+    <x-comments.drawer :posts="collect([$post])" />
 </x-app-layout>

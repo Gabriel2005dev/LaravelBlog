@@ -78,6 +78,5 @@
     </div>
 
     {{-- Drawer de comentários --}}
-    <x-comments.drawer />
-
+    <x-comments.drawer :posts="$posts" />
 </x-app-layout>
