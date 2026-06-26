@@ -35,7 +35,7 @@
 <div
     x-data="{
         posts: @js($drawerPosts),
-        selectedPost: null,
+        
         get post() {
             return this.posts.find((post) => post.id === this.selectedPost) || null;
         }
@@ -202,56 +202,86 @@
 
         {{-- FOOTER --}}
         <footer
-            class="border-t bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
-            x-show="post"
-            x-data="{ sending: false }"
+    class="border-t bg-white p-5"
+    x-data="{
+        sending: false,
+        body: '',
+        max: 400,
+
+        get remaining() {
+            return this.max - this.body.length
+        },
+
+        get isLimit() {
+            return this.body.length >= this.max
+        }
+    }"
+    x-show="post"
+>
+
+@auth
+<form
+    method="POST"
+    :action="post.commentStoreUrl"
+    class="flex items-start gap-3"
+    @submit="if (sending || isLimit) $event.preventDefault(); sending = true"
+>
+    @csrf
+
+    {{-- AVATAR (ALINHADO NO TOPO) --}}
+    <img
+        src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+        class="h-10 w-10 rounded-full border object-cover mt-1"
+    >
+
+    {{-- INPUT --}}
+    <div class="flex-1 relative">
+
+        <textarea
+            name="body"
+            rows="2"
+            required
+            maxlength="400"
+            placeholder="Escreva um comentário..."
+            x-model="body"
+            class="w-full resize-none rounded-2xl border text-sm pr-14 pb-8 pt-3
+            focus:ring-2 transition"
+            :class="isLimit
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-violet-500 focus:ring-violet-500'
+            "
+        ></textarea>
+
+        {{-- CONTADOR --}}
+        <div
+            class="absolute bottom-3 left-3 text-xs"
+            :class="isLimit ? 'text-red-500' : 'text-gray-400'"
         >
+            <span x-text="remaining"></span> / 400
+        </div>
 
-            @auth
-            <form
-                method="POST"
-                :action="post.commentStoreUrl"
-                class="flex items-end gap-3"
-                @submit="if (sending) $event.preventDefault(); sending = true"
-            >
-               
-                    @csrf
+        {{-- BOTÃO DENTRO DO INPUT (CIRCULAR) --}}
+        <button
+            type="submit"
+            :disabled="sending || body.length === 0"
+            class="absolute bottom-3 right-1.5 h-8 w-8 flex items-center justify-center
+            rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F]
+            text-white transition hover:scale-105 disabled:opacity-50"
+        >
+            <x-lucide-send class="w-4 h-4"/>
+        </button>
 
-                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}" alt="Avatar de {{ Auth::user()->name }}" class="h-10 w-10 rounded-full border object-cover">
+    </div>
+</form>
 
-                    <div class="flex-1">
-                        <textarea
-                            name="body"
-                            rows="2"
-                            required
-                            minlength="3"
-                            maxlength="400"
-                            placeholder="Escreva um comentário..."
-                            class="w-full resize-none rounded-2xl border-gray-300 text-sm focus:border-violet-500 focus:ring-violet-500"
-                        ></textarea>
+@else
+    <a href="{{ route('login') }}"
+       class="block rounded-2xl bg-gray-50 p-4 text-center text-sm font-semibold text-indigo-600 hover:bg-indigo-50">
+        Entre para participar da conversa.
+    </a>
+@endauth
 
-                        <p class="mt-1 text-xs text-gray-400">
-                            Máximo de 400 caracteres
-                        </p>
-                    </div>
-
-                    <button
-                        :disabled="sending"
-                        class="rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-5 py-2 font-semibold text-white transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <span x-show="!sending">Enviar</span>
-                        <span x-show="sending">Enviando...</span>
-                    </button>
-
-                </form>
-            @else
-                <a href="{{ route('login') }}" class="block rounded-2xl bg-gray-50 p-4 text-center text-sm font-semibold text-indigo-600 hover:bg-indigo-50">
-                    Entre para participar da conversa.
-                </a>
-            @endauth
-
-        </footer>
-
+</footer>
     </aside>
 
 </div>

@@ -50,7 +50,7 @@
                 )
             })
         })
-        </script>]
+        </script>
         <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('comments', {
