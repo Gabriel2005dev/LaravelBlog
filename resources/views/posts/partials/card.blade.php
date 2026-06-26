@@ -3,32 +3,64 @@
 @php
     $comments = $post->comments ?? collect();
     $shareUrl = route('posts.show', $post);
+
+    $body = trim($post->body);
+
+   $previewLength = 800;
+
+if (mb_strlen($body) > $previewLength) {
+
+    $preview = mb_substr($body, 0, $previewLength);
+
+    // Remove a última palavra incompleta
+    $preview = preg_replace('/\s+\S*$/u', '', $preview);
+
+    // Remove espaços no final
+    $preview = rtrim($preview);
+
+    // Adiciona reticências
+    $preview .= '...';
+
+    $hasMore = true;
+
+} else {
+
+    $preview = $body;
+
+    $hasMore = false;
+}
 @endphp
 
 <article
     class="bg-white border border-gray-100 rounded-tl-5xl rounded-br-5xl overflow-hidden
            transition-all duration-300 shadow"
-x-data="{
-    editing: {{ $errors->any() && old('post_id') == $post->id ? 'true' : 'false' }},
-    shared: false,
+    x-data="{
+        editing: {{ $errors->any() && old('post_id') == $post->id ? 'true' : 'false' }},
+        shared: false,
+        expandedText: false,
 
-    async share() {
-        const data = {
-            title: @js($post->title),
-            text: @js(\Illuminate\Support\Str::limit($post->body, 120)),
-            url: @js($shareUrl)
-        };
+        async share() {
 
-        if (navigator.share) {
-            await navigator.share(data);
-        } else {
-            await navigator.clipboard.writeText(data.url);
+            const data = {
+                title: @js($post->title),
+                text: @js(\Illuminate\Support\Str::limit($post->body,120)),
+                url: @js($shareUrl)
+            };
+
+            if (navigator.share) {
+                await navigator.share(data);
+            } else {
+                await navigator.clipboard.writeText(data.url);
+            }
+
+            this.shared = true;
+
+            setTimeout(() => {
+                this.shared = false;
+            }, 2000);
         }
+    }"
 
-        this.shared = true;
-        setTimeout(() => this.shared = false, 2000);
-    }
-}"
 
 >
 
@@ -98,9 +130,35 @@ x-data="{
             {{ $post->title }}
         </a>
 
-        <p class="text-sm text-gray-600 whitespace-pre-line">
-            {{ $expanded ? $post->body : \Illuminate\Support\Str::limit($post->body, 1500) }}
-        </p>
+    <div class="mt-3">
+
+    <p
+        class="text-sm text-gray-600 leading-2 break-words whitespace-pre-line transition-all duration-300"
+        x-text="expandedText ? @js($body) : @js($preview)">
+    </p>
+
+    @if($hasMore)
+
+        <button
+            type="button"
+            @click="expandedText = !expandedText"
+            class="mt-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">
+
+            <span x-show="!expandedText">
+                Saiba mais
+            </span>
+
+            <span x-show="expandedText">
+                Mostrar menos
+            </span>
+
+        </button>
+
+    @endif
+
+</div>
+
+    
 
        
 
@@ -125,104 +183,146 @@ x-data="{
         @endcan
 
     </div>
-
     {{-- ACTIONS --}}
-    <div class="p-4">
+<div class="p-4">
 
-        <div class="flex items-center justify-between flex-wrap gap-3">
+    <div class="flex items-center justify-between">
 
-        <div class="flex items-center justify-between flex-wrap gap-4">
+        {{-- Grupo da esquerda --}}
+        <div class="flex items-center gap-2">
 
-    <div class="flex items-center gap-2">
-
-
-{{-- LIKE --}}
-<form method="POST" action="{{ route('posts.like.toggle', $post) }}">
-    @csrf
-
-    <button
-        class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition
-        {{ $post->liked_by_current_user
-            ? 'bg-red-50 text-red-600'
-            : 'text-gray-600 hover:bg-red-50 hover:text-red-600' }}">
-
-        @if($post->liked_by_current_user)
-            {{-- Clicado: coração preenchido --}}
-            <x-lucide-heart
-                class="h-4 w-4 fill-current" />
-        @else
-            {{-- Normal --}}
-            <x-lucide-heart
-                class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
-
-            {{-- Hover --}}
-            <x-lucide-heart-handshake
-                class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
-        @endif
-
-        <span>{{ $post->likes_count }}</span>
-    </button>
-</form>
-
-        {{-- COMMENTS --}}
-<button
-    type="button"
-    @click="
-        selectedPost = {{ $post->id }};
-        commentsDrawer = true;
-    "
-    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
-
-    {{-- Normal --}}
-    <x-lucide-message-circle
-        class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
-
-    {{-- Hover --}}
-    <x-lucide-message-circle-more
-        class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
-
-    {{ $post->comments_count }}
-</button>
-
-{{-- SHARE --}}
-<button
-    type="button"
-    @click="share()"
-    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition">
-
-    {{-- Normal --}}
-    <x-lucide-share-2
-        class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
-
-    {{-- Hover --}}
-    <x-lucide-waypoints
-        class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
-
-    <span x-text="shared ? 'Copiado!' : 'Compartilhar'"></span>
-</button>
-
-            {{-- SAVE --}}
-            <form method="POST" action="{{ route('posts.save.toggle', $post) }}">
+            {{-- LIKE --}}
+            <form method="POST" action="{{ route('posts.like.toggle', $post) }}">
                 @csrf
 
                 <button
-                    class="flex items-center gap-2
-                           px-3 py-1.5 rounded-full border
-                           transition text-sm
+                    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition
+                    {{ $post->liked_by_current_user
+                        ? 'bg-red-50 text-red-600'
+                        : 'text-gray-600 hover:bg-red-50 hover:text-red-600' }}">
 
-                           {{ $post->saved_by_current_user
-                               ? ' border-amber-100 text-amber-600'
-                               : 'bg-white border-gray-200 text-gray-600' }}">
+                    @if($post->liked_by_current_user)
 
-                    <x-lucide-bookmark
-                        class="w-4 h-4 {{ $post->saved_by_current_user ? 'fill-current' : '' }}" />
+                        <x-lucide-heart class="h-4 w-4 fill-current" />
 
-                    Salvar
+                    @else
+
+                        <x-lucide-heart
+                            class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+
+                        <x-lucide-heart-handshake
+                            class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+
+                    @endif
+
+                    <span>{{ $post->likes_count }}</span>
+
                 </button>
 
             </form>
 
+            {{-- COMMENTS --}}
+            <button
+                type="button"
+                @click="
+                    selectedPost = {{ $post->id }};
+                    commentsDrawer = true;
+                "
+                class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
+
+                <x-lucide-message-circle
+                    class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+
+                <x-lucide-message-circle-more
+                    class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+
+                <span>{{ $post->comments_count }}</span>
+
+            </button>
+
+            {{-- SHARE --}}
+            <button
+                type="button"
+                @click="share()"
+                class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition">
+
+                <x-lucide-share-2
+                    class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+
+                <x-lucide-waypoints
+                    class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+
+                <span x-text="shared ? 'Copiado!' : 'Compartilhar'"></span>
+
+            </button>
+
         </div>
 
+        {{-- Grupo da direita --}}
+        <form method="POST" action="{{ route('posts.save.toggle', $post) }}">
+    @csrf
+
+    <button
+        type="submit"
+        class="group relative flex items-center justify-center
+               w-10 h-10 rounded-full overflow-hidden
+               transition-colors duration-200
+
+               {{ $post->saved_by_current_user
+                    ? 'border-0'
+                    : 'bg-white border border-gray-200'
+               }}">
+
+        {{-- Fundo gradiente --}}
+        <span
+            class="absolute inset-0 rounded-full
+                   bg-gradient-to-br
+                   from-[#7B1FF7]
+                   via-[#C31BEB]
+                   via-[#FF4FA3]
+                   to-[#FFD23F]
+                   transition-opacity duration-200
+
+                   {{ $post->saved_by_current_user
+                        ? 'opacity-100'
+                        : 'opacity-0 group-hover:opacity-100'
+                   }}">
+        </span>
+
+        @if ($post->saved_by_current_user)
+
+            <x-lucide-bookmark-check
+                class="relative z-10 w-5 h-5 text-white stroke-white" />
+
+        @else
+
+            <div class="relative z-10 w-5 h-5">
+
+                {{-- Ícone normal --}}
+                <x-lucide-bookmark
+                    class="absolute inset-0 w-5 h-5
+                           text-gray-600
+                           transition-opacity duration-200
+                           opacity-100 group-hover:opacity-0" />
+
+                {{-- Ícone no hover --}}
+                <x-lucide-bookmark-check
+                    class="absolute inset-0 w-5 h-5
+                           text-white stroke-white
+                           transition-opacity duration-200
+                           opacity-0 group-hover:opacity-100" />
+
+            </div>
+
+        @endif
+
+    </button>
+</form>
+   
     </div>
+
+</div>
+  
+
+      
 </article>

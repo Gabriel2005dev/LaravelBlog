@@ -67,7 +67,7 @@
     >
 
         {{-- HEADER --}}
-        <header class="sticky top-0 z-20 border-b bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/90">
+        <header class="sticky top-0 z-20 bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/90">
 
             <div class="flex items-center justify-between px-6 py-4">
 
@@ -102,7 +102,7 @@
             <section
             
             
-            class="border-b p-6 dark:border-zinc-800">
+            class="p-6">
 
                 <div class="flex gap-4">
 
@@ -132,11 +132,6 @@
 
             {{-- COMMENTS --}}
             <section class="p-6">
-
-                <h3 class="mb-6 text-sm font-semibold uppercase tracking-wide text-gray-500">
-                    Comentários
-                </h3>
-
                 <template x-if="post.comments.length === 0">
                     <p class="rounded-2xl bg-gray-50 p-5 text-center text-sm text-gray-500 dark:bg-zinc-800 dark:text-zinc-300">
                         Ainda não há comentários. Seja a primeira pessoa a comentar.
@@ -230,7 +225,7 @@
                     x-model="body"
                     @input="if (body.length > max) body = body.slice(0, max)"
                     placeholder="Escreva um comentário..."
-                    class="w-full resize-none rounded-2xl border pb-8 pr-14 pt-3 text-sm transition focus:ring-2"
+                    class="w-full resize-none rounded-2xl border pb-8 pr-14 pt-3 text-sm transition focus:ring-1"
                     :class="isLimit
                         ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-gray-300 focus:border-violet-500 focus:ring-violet-500'
