@@ -63,7 +63,7 @@
         x-transition:leave="transform transition ease-in duration-200"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
-        class="relative flex h-screen w-full max-w-xl flex-col overflow-hidden bg-white shadow-2xl dark:bg-zinc-900"
+        class="relative flex h-screen w-full max-w-xl flex-col overflow-x-hidden bg-white shadow-2xl dark:bg-zinc-900"
     >
 
         {{-- HEADER --}}
@@ -108,7 +108,7 @@
 
                     <img :src="post.authorAvatar" :alt="`Avatar de ${post.authorName}`" class="h-11 w-11 rounded-full border object-cover">
 
-                    <div class="flex-1">
+                    <div class="flex-1 min-w-0">
 
                         <div class="flex flex-wrap items-center gap-2">
 
@@ -144,7 +144,7 @@
                 </template>
 
                 <template x-for="comment in post.comments" :key="comment.id">
-                    <div class="mb-8 flex gap-4">
+                    <div class="mb-8 flex gap-4 min-w-0">
 
                         <img :src="comment.authorAvatar" :alt="`Avatar de ${comment.authorName}`" class="h-10 w-10 rounded-full border object-cover">
 
@@ -165,28 +165,11 @@
                                     </button>
                                 </form>
                             </div>
-                            <div x-data="{ expanded: false }" class="mt-2">
 
-                                 <p
-                                    class="text-sm leading-5 text-gray-600 dark:text-zinc-300 whitespace-pre-line break-words"
-                                    x-text="expanded
-                                        ? comment.body
-                                        : (comment.body.length > 200
-                                            ? comment.body.slice(0, 200).trimEnd() + '...'
-                                            : comment.body)"
-                                ></p>
-
-                                <template x-if="comment.body.length > 200">
-                                    <button
-                                        @click="expanded = !expanded"
-                                        class="mt-1 text-xs font-semibold text-violet-600 hover:underline"
-                                        x-text="expanded ? 'Mostrar menos' : 'Saiba mais'"
-                                    ></button>
-                                </template>
-
-                            </div>
-
-
+                              <p
+                                class="mt-2 text-sm leading-5 text-gray-600 dark:text-zinc-300 whitespace-pre-line break-words [overflow-wrap:anywhere]"
+                                x-text="comment.body"
+                            ></p>
                         </div>
 
                     </div>
