@@ -37,7 +37,7 @@
         posts: @js($drawerPosts),
         selectedPost: null,
         get post() {
-            return this.posts.find((post) => post.id === selectedPost) || null;
+            return this.posts.find((post) => post.id === this.selectedPost) || null;
         }
     }"
     x-show="commentsDrawer"
@@ -167,14 +167,14 @@
                             </div>
                             <div x-data="{ expanded: false }" class="mt-2">
 
-                                <p class="text-sm text-gray-600 dark:text-zinc-300 whitespace-pre-wrap break-words">
-                                    <span x-text="expanded 
-                                        ? comment.body 
-                                        : (comment.body.length > 200 
-                                            ? comment.body.slice(0, 200) + '...' 
-                                            : comment.body)">
-                                    </span>
-                                </p>
+                                 <p
+                                    class="text-sm leading-5 text-gray-600 dark:text-zinc-300 whitespace-pre-line break-words"
+                                    x-text="expanded
+                                        ? comment.body
+                                        : (comment.body.length > 200
+                                            ? comment.body.slice(0, 200).trimEnd() + '...'
+                                            : comment.body)"
+                                ></p>
 
                                 <template x-if="comment.body.length > 200">
                                     <button
@@ -219,19 +219,21 @@
 
                     <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}" alt="Avatar de {{ Auth::user()->name }}" class="h-10 w-10 rounded-full border object-cover">
 
-                    <textarea
-                        name="body"
-                        rows="2"
-                        required
-                        minlength="3"
-                        maxlength="400"
-                        placeholder="Escreva um comentário..."
-                        class="w-full resize-none rounded-2xl border-gray-300 text-sm focus:border-violet-500 focus:ring-violet-500"
-                    ></textarea>
+                    <div class="flex-1">
+                        <textarea
+                            name="body"
+                            rows="2"
+                            required
+                            minlength="3"
+                            maxlength="400"
+                            placeholder="Escreva um comentário..."
+                            class="w-full resize-none rounded-2xl border-gray-300 text-sm focus:border-violet-500 focus:ring-violet-500"
+                        ></textarea>
 
-                    <p class="text-xs text-gray-400 mt-1">
-                        Máximo de 400 caracteres
-                    </p>
+                        <p class="mt-1 text-xs text-gray-400">
+                            Máximo de 400 caracteres
+                        </p>
+                    </div>
 
                     <button
                         :disabled="sending"

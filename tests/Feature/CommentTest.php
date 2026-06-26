@@ -24,7 +24,23 @@ class CommentTest extends TestCase
         $this->assertDatabaseHas('comments', ['post_id' => $post->id, 'user_id' => $user->id]);
     }
 
-        public function test_non_author_cannot_delete_comment_unless_post_author(): void
+    public function test_comment_body_is_normalized_before_saving(): void
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create();
+
+        $this->actingAs($user)->post(route('posts.comments.store', $post), [
+            'body' => "  Primeira linha   com espaços  \r\n\r\n   Segunda linha  ",
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('comments', [
+            'post_id' => $post->id,
+            'user_id' => $user->id,
+            'body' => "Primeira linha com espaços\nSegunda linha",
+        ]);
+    }
+
+    public function test_non_author_cannot_delete_comment_unless_post_author(): void
     {
         $comment = Comment::factory()->create();
         $otherUser = User::factory()->create();
