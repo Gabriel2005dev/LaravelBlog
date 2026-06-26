@@ -41,8 +41,16 @@
             </div>
 
             <a href="{{ route('posts.create') }}"
-                class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-3 py-1.5 text-sm font-semibold text-white shadow-sm">
-                <x-lucide-badge-plus class="h-5 w-5" />
+                class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-3 py-1.5 text-sm font-semibold text-white shadow-sm">
+
+                {{-- Normal --}}
+                <x-lucide-circle-plus
+                    class="h-5 w-5 block group-hover:hidden transition-all duration-200" />
+
+                {{-- Hover --}}
+                <x-lucide-badge-plus
+                    class="h-5 w-5 hidden group-hover:block transition-all duration-200" />
+
                 Novo
             </a>
 

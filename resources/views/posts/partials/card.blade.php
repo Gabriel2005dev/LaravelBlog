@@ -135,50 +135,71 @@ x-data="{
 
     <div class="flex items-center gap-2">
 
-        {{-- LIKE --}}
-        <form method="POST" action="{{ route('posts.like.toggle', $post) }}">
-            @csrf
 
-            <button
-                class="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition
-                {{ $post->liked_by_current_user
-                    ? 'bg-red-50 text-red-600'
-                    : 'text-gray-600 hover:bg-red-50 hover:text-red-600' }}">
+{{-- LIKE --}}
+<form method="POST" action="{{ route('posts.like.toggle', $post) }}">
+    @csrf
 
-                <x-lucide-heart
-                    class="h-4 w-4 {{ $post->liked_by_current_user ? 'fill-current' : '' }}" />
+    <button
+        class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition
+        {{ $post->liked_by_current_user
+            ? 'bg-red-50 text-red-600'
+            : 'text-gray-600 hover:bg-red-50 hover:text-red-600' }}">
 
-                {{ $post->likes_count }}
-            </button>
-        </form>
+        @if($post->liked_by_current_user)
+            {{-- Clicado: coração preenchido --}}
+            <x-lucide-heart
+                class="h-4 w-4 fill-current" />
+        @else
+            {{-- Normal --}}
+            <x-lucide-heart
+                class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+
+            {{-- Hover --}}
+            <x-lucide-heart-handshake
+                class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+        @endif
+
+        <span>{{ $post->likes_count }}</span>
+    </button>
+</form>
 
         {{-- COMMENTS --}}
-        <button
-            type="button"
-            @click="
-                selectedPost = {{ $post->id }};
-                commentsDrawer = true;
-            "
-            class="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
+<button
+    type="button"
+    @click="
+        selectedPost = {{ $post->id }};
+        commentsDrawer = true;
+    "
+    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
 
-            <x-lucide-message-circle class="h-4 w-4" />
+    {{-- Normal --}}
+    <x-lucide-message-circle
+        class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
 
-            {{ $post->comments_count }}
-        </button>
+    {{-- Hover --}}
+    <x-lucide-message-circle-more
+        class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
 
-        {{-- SHARE --}}
-        <button
-            type="button"
-            @click="share()"
-            class="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition">
+    {{ $post->comments_count }}
+</button>
 
-            <x-lucide-share-2 class="h-4 w-4" />
+{{-- SHARE --}}
+<button
+    type="button"
+    @click="share()"
+    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition">
 
-            <span x-text="shared ? 'Copiado!' : 'Compartilhar'"></span>
-        </button>
+    {{-- Normal --}}
+    <x-lucide-share-2
+        class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
 
-    </div>
-</div>
+    {{-- Hover --}}
+    <x-lucide-waypoints
+        class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+
+    <span x-text="shared ? 'Copiado!' : 'Compartilhar'"></span>
+</button>
 
             {{-- SAVE --}}
             <form method="POST" action="{{ route('posts.save.toggle', $post) }}">
