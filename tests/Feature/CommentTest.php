@@ -24,19 +24,20 @@ class CommentTest extends TestCase
         $this->assertDatabaseHas('comments', ['post_id' => $post->id, 'user_id' => $user->id]);
     }
 
-    public function test_comment_body_is_normalized_before_saving(): void
+        public function test_authenticated_user_can_comment_with_exactly_four_hundred_characters(): void
     {
         $user = User::factory()->create();
         $post = Post::factory()->create();
+        $body = str_repeat('a', 400);
 
         $this->actingAs($user)->post(route('posts.comments.store', $post), [
-            'body' => "  Primeira linha   com espaços  \r\n\r\n   Segunda linha  ",
+            'body' => $body,
         ])->assertRedirect();
 
         $this->assertDatabaseHas('comments', [
             'post_id' => $post->id,
             'user_id' => $user->id,
-            'body' => "Primeira linha com espaços\nSegunda linha",
+            'body' => $body,
         ]);
     }
 
