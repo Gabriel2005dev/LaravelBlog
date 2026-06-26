@@ -242,6 +242,9 @@
             rows="2"
             required
             maxlength="400"
+            :maxlength="maxLength"
+            x-model="body"
+            @input="if (body.length > maxLength) body = body.slice(0, maxLength)"
             placeholder="Escreva um comentário..."
             x-model="body"
             class="w-full resize-none rounded-2xl border text-sm pr-14 pb-8 pt-3
