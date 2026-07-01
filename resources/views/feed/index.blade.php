@@ -41,6 +41,7 @@
             </div>
 
             <a href="{{ route('posts.create') }}"
+                @click.prevent="$dispatch('open-post-create')"
                 class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-3 py-1.5 text-sm font-semibold text-white shadow-sm">
 
                 {{-- Normal --}}
@@ -85,6 +86,8 @@
         </div>
     </div>
 
-    {{-- Drawer de comentários --}}
+    {{-- Drawers --}}
+    <x-posts.drawer :posts="$posts" />
     <x-comments.drawer :posts="$posts" />
+    
 </x-app-layout>

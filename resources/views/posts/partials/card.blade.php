@@ -97,6 +97,7 @@ if (mb_strlen($body) > $previewLength) {
 
            <a
                 href="{{ route('posts.edit', $post) }}"
+                @click.prevent="$dispatch('open-post-edit', { id: {{ $post->id }} })"
                 class="p-2 rounded-full text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition"
                 title="Editar publicação">
 

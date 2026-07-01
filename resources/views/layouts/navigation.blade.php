@@ -1,5 +1,6 @@
 @php
     $sidebarItems = [
+         ['label' => 'Home', 'href' => route('feed'), 'active' => request()->routeIs('feed'), 'icon' => 'lucide-house'],
         ['label' => 'Curtidos', 'href' => route('posts.liked.index'), 'active' => request()->routeIs('posts.liked.index'), 'icon' => 'lucide-heart'],
         ['label' => 'Salvos', 'href' => route('posts.saved.index'), 'active' => request()->routeIs('posts.saved.index'), 'icon' => 'lucide-bookmark'],
         ['label' => 'Atividades', 'href' => route('feed') . '#feed', 'active' => request()->routeIs('feed'), 'icon' => 'lucide-bell'],
@@ -14,10 +15,11 @@
         class="fixed inset-y-0 left-0 z-50 flex flex-col border-r border-gray-100 bg-white shadow-lg transition-all duration-300"
         :class="sidebarOpen ? 'w-64' : 'w-20'"
     >
-        <div class="flex h-16 items-center justify-center border-b border-gray-100 px-3">
+      <div class="flex h-16 items-center border-b border-gray-100 px-3" :class="sidebarOpen ? 'justify-start gap-3' : 'justify-center'">
             <a href="{{ route('feed') }}" class="flex items-center justify-center overflow-hidden rounded-full">
                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-            </a>
+            </a>]
+            <a href="{{ route('feed') }}" x-show="sidebarOpen" x-transition.opacity class="truncate text-lg font-extrabold tracking-tight text-gray-900">LaravelBlog</a>
         </div>
 
         <button
@@ -122,6 +124,7 @@
 
             <a
                 href="{{ route('posts.create') }}"
+                @click.prevent="$dispatch('open-post-create')"
                 class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-4 py-2 text-sm font-semibold text-white shadow-sm"
             >
                 <x-lucide-circle-plus class="h-5 w-5 block group-hover:hidden" />

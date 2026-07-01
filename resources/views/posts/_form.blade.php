@@ -37,7 +37,7 @@
         @if (! $inline)
             <a href="{{ url()->previous() }}" class="text-sm text-gray-600 hover:text-gray-900">Cancelar</a>
         @else
-            <button type="button" @click="editing = false" class="text-sm text-gray-600 hover:text-gray-900">Cancelar</button>
+            <button type="button" @click="$dispatch('close-post-drawer')" class="text-sm text-gray-600 hover:text-gray-900">Cancelar</button>
         @endif
     </div>
 </div>
