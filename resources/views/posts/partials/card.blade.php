@@ -95,13 +95,13 @@ if (mb_strlen($body) > $previewLength) {
         @can('update', $post)
         <div class="flex items-center">
 
-            <button
-                type="button"
-                @click="editing = ! editing"
-                class="p-2 rounded-full text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition">
+           <a
+                href="{{ route('posts.edit', $post) }}"
+                class="p-2 rounded-full text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition"
+                title="Editar publicação">
 
                 <x-lucide-pencil class="w-4 h-4" />
-            </button>
+            </a>
 
             <form method="POST"
                 action="{{ route('posts.destroy', $post) }}"
@@ -157,30 +157,6 @@ if (mb_strlen($body) > $previewLength) {
     @endif
 
 </div>
-
-    
-
-       
-
-        @can('update', $post)
-            <form
-                x-show="editing"
-                x-cloak
-                method="POST"
-                action="{{ route('posts.update', $post) }}"
-                class="mt-6 p-5 rounded-2xl border border-gray-100 bg-gray-50">
-                @csrf
-                @method('PATCH')
-
-                <input type="hidden" name="post_id" value="{{ $post->id }}">
-
-                @include('posts._form', [
-                    'post' => $post,
-                    'buttonText' => 'Salvar alterações',
-                    'inline' => true
-                ])
-            </form>
-        @endcan
 
     </div>
     {{-- ACTIONS --}}

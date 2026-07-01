@@ -25,18 +25,11 @@
 
             @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="max-w-6xl mx-auto bg-white shadow m-3 rounded-4xl">
-                    <div class="p-4">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="min-h-screen pt-20 pl-20 transition-all duration-300">
+                <div class="px-4 pb-8">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
         <script>
