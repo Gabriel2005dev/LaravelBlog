@@ -96,7 +96,9 @@
         </header>
 
         {{-- BODY --}}
-        <div class="flex-1 overflow-y-auto" x-show="post">
+        <template x-if="post">
+    <div class="flex-1 overflow-y-auto">
+      
 
             {{-- POST --}}
             <section
@@ -171,17 +173,19 @@
                 </template>
 
             </section>
-
         </div>
+        </template>
 
-        <div class="flex-1 place-content-center p-6 text-center text-sm text-gray-500" x-show="! post">
+      <template x-if="!post">
+        <div class="flex-1 place-content-center p-6 text-center text-sm text-gray-500">
             Não foi possível carregar os comentários desta publicação.
         </div>
+    </template>
 
         {{-- FOOTER --}}
+        <template x-if="post">
        <footer
     class="border-t bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
-    x-show="post"
     x-data="{
         sending: false,
         body: @js(old('body', '')),
@@ -259,6 +263,7 @@
     @endauth
 
 </footer>
+</template>
     </aside>
 
 </div>

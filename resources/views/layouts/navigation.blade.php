@@ -18,11 +18,9 @@
       <div class="flex h-16 items-center border-b border-gray-100 px-3" :class="sidebarOpen ? 'justify-start gap-3' : 'justify-center'">
             <a href="{{ route('feed') }}" class="flex items-center justify-center overflow-hidden rounded-full">
                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-            </a>]
+            </a>
             <a href="{{ route('feed') }}" x-show="sidebarOpen" x-transition.opacity class="truncate text-lg font-extrabold tracking-tight text-gray-900">LaravelBlog</a>
-        </div>
-
-        <button
+             <button
             type="button"
             @click="sidebarOpen = ! sidebarOpen"
             class="mx-auto mt-4 flex h-10 w-10 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
@@ -31,6 +29,7 @@
             <x-lucide-panel-left-close class="h-5 w-5" x-show="sidebarOpen" />
             <x-lucide-panel-left-open class="h-5 w-5" x-show="!sidebarOpen" />
         </button>
+        </div>
 
         <nav class="mt-6 flex flex-1 flex-col gap-2 px-3">
             @foreach ($sidebarItems as $item)
@@ -48,7 +47,11 @@
         </nav>
 
         <div class="border-t border-gray-100 p-3">
-            <x-dropdown align="left" width="full">
+            <x-dropdown
+                align="left"
+                position="top"
+                width="full"
+            >
                 <x-slot name="trigger">
                     <button
                         type="button"
@@ -70,20 +73,26 @@
                 </x-slot>
 
                 <x-slot name="content">
-                    <div class="border-b px-3 py-3">
-                        <p class="truncate text-sm font-semibold">
-                            {{ Auth::user()->name }}
-                        </p>
+                    <div class="flex items-center gap-3 border-b px-4 py-4">
+                        <x-user-avatar
+                            :user="Auth::user()"
+                            size="w-11 h-11"
+                        />
 
-                        <p class="truncate text-xs text-gray-500">
-                            {{ Auth::user()->email }}
-                        </p>
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-semibold text-gray-900">
+                                {{ Auth::user()->name }}
+                            </p>
+
+                            <p class="truncate text-xs text-gray-500">
+                                {{ Auth::user()->email }}
+                            </p>
+                        </div>
                     </div>
-
                     <x-dropdown-link :href="route('profile.edit')">
-                        <div class="flex items-center gap-2">
-                            <x-lucide-user class="h-4 w-4" />
-                            Perfil
+                        <div class="flex items-center gap-3">
+                            <x-lucide-user class="h-4 w-4 text-gray-500" />
+                            <span>Perfil</span>
                         </div>
                     </x-dropdown-link>
 
@@ -94,9 +103,9 @@
                             :href="route('logout')"
                             onclick="event.preventDefault(); this.closest('form').submit();"
                         >
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-3 text-red-600">
                                 <x-lucide-log-out class="h-4 w-4" />
-                                Sair
+                                <span>Sair</span>
                             </div>
                         </x-dropdown-link>
                     </form>
