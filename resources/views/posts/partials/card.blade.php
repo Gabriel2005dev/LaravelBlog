@@ -236,65 +236,58 @@ if (mb_strlen($body) > $previewLength) {
         </div>
 
         {{-- Grupo da direita --}}
-        <form method="POST" action="{{ route('posts.save.toggle', $post) }}">
+        {{-- Grupo da direita --}}
+<form method="POST" action="{{ route('posts.save.toggle', $post) }}">
     @csrf
 
     <button
         type="submit"
-        class="group relative flex items-center justify-center
-               w-10 h-10 rounded-tl-xl rounded-br-xl overflow-hidden
-               transition-colors duration-200
+        class="group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-tl-2xl rounded-br-2xl transition-colors duration-200
+        {{ $post->saved_by_current_user
+            ? 'border-0'
+            : 'border border-gray-200 bg-white'
+        }}"
+    >
 
-               {{ $post->saved_by_current_user
-                    ? 'border-0'
-                    : 'bg-white border border-gray-200'
-               }}">
-
-        {{-- Fundo gradiente --}}
+        {{-- Fundo --}}
         <span
-            class="absolute inset-0 rounded-tl-2xl rounded-br-2xl
-                   bg-gradient-to-br
-                   from-[#7B1FF7]
-                   via-[#C31BEB]
-                   via-[#FF4FA3]
-                   to-[#FFD23F]
-                   transition-opacity duration-200
-
-                   {{ $post->saved_by_current_user
-                        ? 'opacity-100'
-                        : 'opacity-0 group-hover:opacity-100'
-                   }}">
-        </span>
+            class="absolute inset-0 rounded-tl-2xl rounded-br-2xl bg-pink-600 transition-opacity duration-200
+            {{ $post->saved_by_current_user
+                ? 'opacity-100'
+                : 'opacity-0 group-hover:opacity-100'
+            }}"
+        ></span>
 
         @if ($post->saved_by_current_user)
 
-            <x-lucide-bookmark-check
-                class="relative z-10 w-5 h-5 text-white stroke-white" />
+            <span class="relative z-10 flex h-5 w-5 items-center justify-center">
+                <x-lucide-bookmark-check
+                    class="h-5 w-5 text-white stroke-[2.2]"
+                />
+            </span>
 
         @else
 
-            <div class="relative z-10 w-5 h-5">
+            <span class="relative z-10 flex h-5 w-5 items-center justify-center">
 
                 {{-- Ícone normal --}}
                 <x-lucide-bookmark
-                    class="absolute inset-0 w-5 h-5
-                           text-gray-600
-                           transition-opacity duration-200
-                           opacity-100 group-hover:opacity-0" />
+                    class="absolute h-5 w-5 text-gray-600 transition-all duration-200 group-hover:scale-90 group-hover:opacity-0"
+                />
 
-                {{-- Ícone no hover --}}
+                {{-- Hover --}}
                 <x-lucide-bookmark-check
-                    class="absolute inset-0 w-5 h-5
-                           text-white stroke-white
-                           transition-opacity duration-200
-                           opacity-0 group-hover:opacity-100" />
+                    class="absolute h-5 w-5 scale-90 text-white opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100"
+                />
 
-            </div>
+            </span>
 
         @endif
 
     </button>
+
 </form>
+     
    
     </div>
 
