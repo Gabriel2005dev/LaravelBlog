@@ -26,8 +26,8 @@
             @include('layouts.navigation')
 
             <!-- Page Content -->
-            <main class="min-h-screen pt-20 pl-20 transition-all duration-300">
-                <div class="px-4 pb-8">
+            <main class="min-h-screen pt-20 transition-all duration-300">
+                <div>
                     {{ $slot }}
                 </div>
             </main>

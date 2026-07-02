@@ -59,7 +59,7 @@
     </x-slot>
 
     <div id="feed">
-        <div class="mx-auto max-w-6xl space-y-3">
+        <div class="mx-auto items-center max-w-6xl space-y-3">
 
             @if (session('status'))
                 <div class="rounded-full bg-green-50 p-4 text-sm text-green-700">
