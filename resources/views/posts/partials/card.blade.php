@@ -73,10 +73,10 @@ if (mb_strlen($body) > $previewLength) {
 
             <div class="justify-center min-w-0 flex flex-col">
 
-                <a href="{{ route('posts.show', $post) }}"
+                <a
                 class="text-md font-bold text-gray-900 hover:text-indigo-600 transition truncate">
                     @if(auth()->id() === $post->user_id)
-                        <span class="bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] bg-clip-text text-transparent font-bold">
+                        <span class="bg-pink-600 bg-clip-text text-transparent font-bold">
                             Você
                         </span>
                     @else
@@ -96,12 +96,11 @@ if (mb_strlen($body) > $previewLength) {
         <div class="flex items-center">
 
            <a
-                href="{{ route('posts.edit', $post) }}"
                 @click.prevent="$dispatch('open-post-edit', { id: {{ $post->id }} })"
-                class="p-2 rounded-full text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition"
+                class="p-2 rounded-full text-gray-500 hover:text-pink-600 transition"
                 title="Editar publicação">
 
-                <x-lucide-pencil class="w-4 h-4" />
+                <x-lucide-pencil class="w-5 h-5" />
             </a>
 
             <form method="POST"
@@ -111,9 +110,9 @@ if (mb_strlen($body) > $previewLength) {
                 @method('DELETE')
 
                 <button
-                    class="p-2 rounded-full text-gray-500 hover:bg-red-50 hover:text-red-600 transition">
+                    class="p-2 rounded-full text-red-600 hover:text-red-600 transition">
 
-                    <x-lucide-trash-2 class="w-4 h-4" />
+                    <x-lucide-trash-2 class="w-5 h-5" />
                 </button>
             </form>
 
@@ -126,8 +125,7 @@ if (mb_strlen($body) > $previewLength) {
     {{-- BODY --}}
     <div class="px-4">
 
-        <a href="{{ route('posts.show', $post) }}"
-           class="block text-xl font-bold tracking-tight text-gray-900 hover:text-indigo-600 transition">
+        <a class="block text-xl font-bold tracking-tight text-gray-900 transition">
             {{ $post->title }}
         </a>
 
@@ -175,20 +173,20 @@ if (mb_strlen($body) > $previewLength) {
                 <button
                     class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition
                     {{ $post->liked_by_current_user
-                        ? 'bg-red-50 text-red-600'
-                        : 'text-gray-600 hover:bg-red-50 hover:text-red-600' }}">
+                        ? 'text-pink-600'
+                        : 'text-gray-600 hover:text-pink-600' }}">
 
                     @if($post->liked_by_current_user)
 
-                        <x-lucide-heart class="h-4 w-4 fill-current" />
+                        <x-lucide-heart class="h-5 w-5 fill-current" />
 
                     @else
 
                         <x-lucide-heart
-                            class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+                            class="h-5 w-5 block group-hover:hidden transition-all duration-200" />
 
                         <x-lucide-heart-handshake
-                            class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+                            class="h-5 w-5 hidden group-hover:block transition-all duration-200" />
 
                     @endif
 
@@ -205,13 +203,13 @@ if (mb_strlen($body) > $previewLength) {
                     selectedPost = {{ $post->id }};
                     commentsDrawer = true;
                 "
-                class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
+                class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:text-pink-600 transition">
 
                 <x-lucide-message-circle
-                    class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+                    class="h-5 w-5 block group-hover:hidden transition-all duration-200" />
 
                 <x-lucide-message-circle-more
-                    class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+                    class="h-5 w-5 hidden group-hover:block transition-all duration-200" />
 
                 <span>{{ $post->comments_count }}</span>
 
@@ -221,13 +219,13 @@ if (mb_strlen($body) > $previewLength) {
             <button
                 type="button"
                 @click="share()"
-                class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition">
+                class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-gray-600 hover:text-pink-600 transition">
 
                 <x-lucide-share-2
-                    class="h-4 w-4 block group-hover:hidden transition-all duration-200" />
+                    class="h-5 w-5 block group-hover:hidden transition-all duration-200" />
 
                 <x-lucide-waypoints
-                    class="h-4 w-4 hidden group-hover:block transition-all duration-200" />
+                    class="h-5 w-5 hidden group-hover:block transition-all duration-200" />
 
                 <span x-text="shared ? 'Copiado!' : 'Compartilhar'"></span>
 

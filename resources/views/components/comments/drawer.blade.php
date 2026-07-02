@@ -135,7 +135,7 @@
             {{-- COMMENTS --}}
             <section class="p-6">
                 <template x-if="post.comments.length === 0">
-                    <p class="rounded-2xl bg-gray-50 p-5 text-center text-sm text-gray-500 dark:bg-zinc-800 dark:text-zinc-300">
+                    <p class="rounded bg-gray-50 p-5 text-center text-sm text-gray-500 dark:bg-zinc-800 dark:text-zinc-300">
                         Ainda não há comentários. Seja a primeira pessoa a comentar.
                     </p>
                 </template>
@@ -229,10 +229,11 @@
                     x-model="body"
                     @input="if (body.length > max) body = body.slice(0, max)"
                     placeholder="Escreva um comentário..."
-                    class="w-full resize-none rounded-2xl border pb-8 pr-14 pt-3 text-sm transition focus:ring-1"
+                    class="w-full resize-none rounded-xl border pb-8 pr-14 pt-3 text-sm transition
+                        focus:outline-none focus:ring-pink-600 focus:border-pink-600"
                     :class="isLimit
                         ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                        : 'border-gray-300 focus:border-violet-500 focus:ring-violet-500'
+                        : 'border-gray-300'
                     "
                 ></textarea>
 
@@ -248,7 +249,7 @@
                 <button
                     type="submit"
                     :disabled="sending || body.trim().length === 0"
-                    class="absolute bottom-3 right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] text-white transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+                    class="absolute bottom-3 right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-pink-600 text-white transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
                     :title="sending ? 'Enviando comentário' : 'Enviar comentário'"
                 >
                     <x-lucide-send class="h-4 w-4" x-show="!sending" />
@@ -257,7 +258,7 @@
             </div>
         </form>
     @else
-        <a href="{{ route('login') }}" class="block rounded-2xl bg-gray-50 p-4 text-center text-sm font-semibold text-indigo-600 hover:bg-indigo-50">
+        <a href="{{ route('login') }}" class="block rounded-xl bg-gray-50 p-4 text-center text-sm font-semibold text-indigo-600 hover:bg-indigo-50">
             Entre para participar da conversa.
         </a>
     @endauth

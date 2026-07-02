@@ -27,6 +27,8 @@
 
             <x-header.user-menu />
 
+            
+
         </div>
 
     </div>

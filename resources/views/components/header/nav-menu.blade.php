@@ -26,7 +26,6 @@
 
     {{-- Novo Post --}}
     <a
-        href="{{ route('posts.create') }}"
         @click.prevent="$dispatch('open-post-create')"
         title="Novo Post"
         aria-label="Novo Post"

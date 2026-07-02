@@ -1,8 +1,4 @@
 <x-app-layout
-    x-data="{
-        commentsDrawer: false,
-        selectedPost: null
-    }"
 >
     <x-slot name="header">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
@@ -40,7 +36,7 @@
                 </div>
             </div>
 
-            <a href="{{ route('posts.create') }}"
+            <a
                 @click.prevent="$dispatch('open-post-create')"
                 class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-3 py-1.5 text-sm font-semibold text-white shadow-sm">
 

@@ -13,8 +13,8 @@
 
     {{-- Campo --}}
     <div
-        class="relative flex h-10 items-center overflow-hidden rounded-full border border-gray-300 bg-white shadow-sm transition-all duration-300 ease-out"
-        :class="open ? 'w-64' : 'w-10 border-transparent shadow-none'"
+        class="relative flex h-10 items-center overflow-hidden rounded-full bg-white shadow transition-all duration-300 ease-out"
+        :class="open ? 'w-64' : 'w-10 border-transparent shadow'"
     >
 
         {{-- Botão Pesquisa --}}
