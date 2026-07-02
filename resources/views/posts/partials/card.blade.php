@@ -32,7 +32,7 @@ if (mb_strlen($body) > $previewLength) {
 @endphp
 
 <article
-    class="bg-white border border-gray-100 rounded-tl-5xl rounded-br-5xl overflow-hidden
+    class="bg-white border border-gray-100 rounded overflow-hidden
            transition-all duration-300 shadow"
     x-data="{
         editing: {{ $errors->any() && old('post_id') == $post->id ? 'true' : 'false' }},
@@ -242,7 +242,7 @@ if (mb_strlen($body) > $previewLength) {
     <button
         type="submit"
         class="group relative flex items-center justify-center
-               w-10 h-10 rounded-full overflow-hidden
+               w-10 h-10 rounded-tl-xl rounded-br-xl overflow-hidden
                transition-colors duration-200
 
                {{ $post->saved_by_current_user
@@ -252,7 +252,7 @@ if (mb_strlen($body) > $previewLength) {
 
         {{-- Fundo gradiente --}}
         <span
-            class="absolute inset-0 rounded-full
+            class="absolute inset-0 rounded-tl-2xl rounded-br-2xl
                    bg-gradient-to-br
                    from-[#7B1FF7]
                    via-[#C31BEB]

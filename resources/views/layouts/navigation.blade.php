@@ -36,7 +36,7 @@
                 <a
                     href="{{ $item['href'] }}"
                     @click="sidebarOpen = true"
-                    class="group flex h-12 items-center rounded-2xl text-sm font-semibold transition {{ $item['active'] ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}"
+                    class="group flex h-12 items-center text-sm font-semibold transition {{ $item['active'] ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}"
                     :class="sidebarOpen ? 'justify-start gap-3 px-4' : 'justify-center px-0'"
                     title="{{ $item['label'] }}"
                 >
@@ -55,7 +55,7 @@
                 <x-slot name="trigger">
                     <button
                         type="button"
-                        class="flex h-12 w-full items-center rounded-2xl transition hover:bg-gray-100"
+                        class="flex h-12 w-full items-center transition hover:bg-gray-100"
                         :class="sidebarOpen ? 'justify-start gap-3 px-3' : 'justify-center px-0'"
                     >
                         <x-user-avatar :user="Auth::user()" id="navAvatar" size="w-9 h-9" />
@@ -73,10 +73,10 @@
                 </x-slot>
 
                 <x-slot name="content">
-                    <div class="flex items-center gap-3 border-b px-4 py-4">
+                    <div class="flex items-center gap-3 border-b p-3">
                         <x-user-avatar
                             :user="Auth::user()"
-                            size="w-11 h-11"
+                            size="w-9 h-9"
                         />
 
                         <div class="min-w-0 flex-1">
@@ -134,7 +134,7 @@
             <a
                 href="{{ route('posts.create') }}"
                 @click.prevent="$dispatch('open-post-create')"
-                class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-4 py-2 text-sm font-semibold text-white shadow-sm"
+                class="group inline-flex items-center justify-center gap-2 rounded-tl-3xl rounded-br-3xl bg-gradient-to-br from-[#7B1FF7] via-[#C31BEB] via-[#FF4FA3] to-[#FFD23F] px-4 py-2 text-sm font-semibold text-white shadow-sm"
             >
                 <x-lucide-circle-plus class="h-5 w-5 block group-hover:hidden" />
                 <x-lucide-badge-plus class="h-5 w-5 hidden group-hover:block" />
