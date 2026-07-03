@@ -105,7 +105,7 @@
                     <button
                         type="button"
                         @click="close()"
-                        class="rounded-full p-2 transition hover:bg-gray-100 dark:hover:bg-zinc-800"
+                        class="rounded-full p-2 transition hover:bg-pink-100 hover:text-pink-600 "
                     >
                         <x-lucide-arrow-left class="h-5 w-5" />
                     </button>
