@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -62,20 +63,25 @@ class ProfileController extends Controller
     }
 
     public function updateAvatar(Request $request)
-{
+   {
     $request->validate([
         'avatar' => ['required', 'image', 'max:2048'],
     ]);
 
     $user = $request->user();
+    $oldAvatar = $user->avatar;
 
     $path = $request->file('avatar')->store('avatars', 'public');
+        $user->avatar = $path;
+        $user->save();
 
-    $user->avatar = $path;
-    $user->save();
+           if ($oldAvatar) {
+            Storage::disk('public')->delete($oldAvatar);
+        }
 
-    return response()->json([
-        'path' => asset('storage/' . $path)
-    ]);
+          return response()->json([
+            'avatar_url' => asset('storage/' . $path),
+        ]);
+    }
 }
-}
+

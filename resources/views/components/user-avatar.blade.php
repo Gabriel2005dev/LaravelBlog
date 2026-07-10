@@ -1,5 +1,4 @@
 <div>
-    <!-- It always seems impossible until it is done. - Nelson Mandela -->
      @props([
     'user' => null,
     'id' => null,
@@ -19,6 +18,7 @@
     @if ($id) id="{{ $id }}" @endif
     src="{{ $avatarUrl }}"
     alt="{{ $alt ?? __('Avatar de :name', ['name' => $name]) }}"
+        data-user-avatar="{{ data_get($user, 'id') }}"
     {{ $attributes->merge(['class' => $size . ' rounded-full object-cover border']) }}
 />
 </div>

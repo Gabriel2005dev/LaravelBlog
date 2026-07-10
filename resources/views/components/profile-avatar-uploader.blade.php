@@ -5,18 +5,17 @@
 ])
 
 <div class="flex justify-center mb-6">
-    <div class="relative w-24 h-24 group">
+    <div class="relative w-40 h-40 transition-transform duration-200 hover:scale-105 group">
 
         <x-user-avatar
             :user="$user"
             :id="$imageId"
-            size="w-24 h-24"
-            class="transition-transform duration-200 group-hover:scale-105"
+            size="w-40 h-40"
         />
 
         <label
             for="{{ $inputId }}"
-            class="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
+            class="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100 cursor-pointer"
             aria-label="{{ __('Alterar avatar') }}"
         >
 
@@ -27,9 +26,7 @@
                 accept="image/*"
             >
 
-            <x-lucide-pencil
-                class="w-6 h-6 text-white"
-            />
+            <x-lucide-pencil class="w-6 h-6 text-white" />
 
         </label>
 
