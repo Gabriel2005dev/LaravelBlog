@@ -22,7 +22,7 @@
         </h2>
 
          <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your'') }}
         </p>
     </header>
 
@@ -59,8 +59,8 @@
             {{-- Posts --}}
             <div class="flex flex-col items-center">
 
-                <div class=" rounded-tl-2xl rounded-br-2xl bg-pink-100 p-3">
-                    <x-lucide-file-text class="w-5 h-5 text-pink-600"/>
+                <div class=" rounded-tl-2xl rounded-br-2xl bg-pink-900 p-3">
+                    <x-lucide-file-text class="w-5 h-5 text-white"/>
                 </div>
 
                 <div class="text-center">
@@ -76,8 +76,8 @@
             {{-- Comments --}}
             <div class="flex flex-col items-center">
 
-                <div class=" rounded-tl-2xl rounded-br-2xl bg-blue-100 p-3">
-                    <x-lucide-message-circle class="w-5 h-5 text-blue-600"/>
+                <div class=" rounded-tl-2xl rounded-br-2xl bg-blue-900 p-3">
+                    <x-lucide-message-circle class="w-5 h-5 text-white"/>
                 </div>
 
                 <div class="text-center">
@@ -93,12 +93,12 @@
             {{-- Likes --}}
             <div class="flex flex-col items-center">
 
-                <div class=" rounded-tl-2xl rounded-br-2xl bg-red-100 p-3">
-                    <x-lucide-heart class="w-5 h-5 text-red-500"/>
+                <div class=" rounded-tl-2xl rounded-br-2xl bg-red-900 p-3">
+                    <x-lucide-heart class="w-5 h-5 text-white"/>
                 </div>
 
                 <div class="text-center">
-                    <p class="text-lg font-bold text-gray-900">
+                    <p class="text-lg font-bold text-red-900">
                         {{ method_exists($user,'likedPosts') ? $user->likedPosts()->count() : 0 }}
                     </p>
                 </div>
