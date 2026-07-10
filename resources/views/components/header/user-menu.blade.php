@@ -17,6 +17,7 @@
             <x-user-avatar
                 :user="Auth::user()"
                 size="w-10 h-10"
+
             />
         </button>
 
@@ -31,6 +32,7 @@
             <x-user-avatar
                 :user="Auth::user()"
                 size="w-10 h-10"
+                
             />
 
             <div class="min-w-0 flex-1">

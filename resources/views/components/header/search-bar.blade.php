@@ -41,7 +41,7 @@
         <input
             x-ref="search"
             type="text"
-            placeholder="Pesquisar..."
+            placeholder="Pesquisar Post..."
             class="h-full w-full border-0 bg-transparent pl-10 pr-10 text-sm outline-none ring-0 placeholder:text-gray-400 focus:border-0 focus:ring-0"
         >
 

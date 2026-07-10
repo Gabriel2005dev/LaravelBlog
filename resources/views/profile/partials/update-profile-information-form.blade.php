@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const input = document.querySelector('#avatarInput');
     const img = document.querySelector('#avatarImg');
-    const navImg = document.querySelector('#navAvatar'); // 👈 navigation
+    const navImgs = document.querySelector('js-nav-avatar'); // 👈 navigation
 
     if (!input || !img) return;
 
