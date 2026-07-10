@@ -13,115 +13,103 @@
         @method('patch')
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          <div class="grid grid-cols-2 gap-8 w-full">
             
 
-    {{-- Lado esquerdo --}}
-    <div class="flex flex-col">
-            
+    <div>
+    <header>
+        <h2 class="text-lg font-medium text-gray-900">
+            {{ __('Info Profile') }}
+        </h2>
 
-        
+         <p class="mt-1 text-sm text-gray-600">
+            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+        </p>
+    </header>
 
-        <x-profile-avatar-uploader :user="$user" />
 
-        <div class="text-center">
+    <div class="flex flex-col items-center w-full">
+
+
+        {{-- Avatar --}}
+        <div class="flex justify-center">
+            <x-profile-avatar-uploader :user="$user" />
+        </div>
+
+
+
+        {{-- Informações do usuário --}}
+        <div class=" text-center">
 
             <h2 class="text-2xl font-bold text-gray-900">
                 {{ $user->name }}
             </h2>
 
-            <p class="mt-2 text-sm text-gray-500 break-all">
+            <p class="text-sm text-gray-500 break-all">
                 {{ $user->email }}
             </p>
+        </div>
 
-            @if (! $user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail || $user->hasVerifiedEmail())
 
-                <div class="mt-5 inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-medium text-green-700">
 
-                    <x-lucide-badge-check class="w-4 h-4"/>
 
-                    {{ __('Verified Account') }}
+        {{-- Estatísticas --}}
+        <div class="flex items-center justify-center gap-6 mt-6">
 
+
+            {{-- Posts --}}
+            <div class="flex flex-col items-center">
+
+                <div class=" rounded-tl-2xl rounded-br-2xl bg-pink-100 p-3">
+                    <x-lucide-file-text class="w-5 h-5 text-pink-600"/>
                 </div>
 
-            @endif
+                <div class="text-center">
+                    <p class="text-lg font-bold text-gray-900">
+                        {{ method_exists($user,'posts') ? $user->posts()->count() : 0 }}
+                    </p>
+                </div>
+
+            </div>
+
+
+
+            {{-- Comments --}}
+            <div class="flex flex-col items-center">
+
+                <div class=" rounded-tl-2xl rounded-br-2xl bg-blue-100 p-3">
+                    <x-lucide-message-circle class="w-5 h-5 text-blue-600"/>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-lg font-bold text-gray-900">
+                        {{ method_exists($user,'comments') ? $user->comments()->count() : 0 }}
+                    </p>
+                </div>
+
+            </div>
+
+
+
+            {{-- Likes --}}
+            <div class="flex flex-col items-center">
+
+                <div class=" rounded-tl-2xl rounded-br-2xl bg-red-100 p-3">
+                    <x-lucide-heart class="w-5 h-5 text-red-500"/>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-lg font-bold text-gray-900">
+                        {{ method_exists($user,'likedPosts') ? $user->likedPosts()->count() : 0 }}
+                    </p>
+                </div>
+
+            </div>
+
 
         </div>
+
 
     </div>
-
-    {{-- Lado direito --}}
-    <div class="space-y-8">
-
-        <div class="flex items-center gap-4">
-
-            <div class="rounded-xl bg-pink-100 p-3">
-
-                <x-lucide-file-text class="w-5 h-5 text-pink-600"/>
-
-            </div>
-
-            <div >
-
-                <p class="text-2xl font-bold text-gray-900">
-                    {{ method_exists($user,'posts') ? $user->posts()->count() : 0 }}
-                </p>
-
-                <p class="text-sm text-gray-500">
-                    Posts
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="flex items-center gap-4">
-
-            <div class="rounded-xl bg-blue-100 p-3">
-
-                <x-lucide-message-circle class="w-5 h-5 text-blue-600"/>
-
-            </div>
-
-            <div>
-
-                <p class="text-2xl font-bold text-gray-900">
-                    {{ method_exists($user,'comments') ? $user->comments()->count() : 0 }}
-                </p>
-
-                <p class="text-sm text-gray-500">
-                    Comments
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="flex items-center gap-4">
-
-            <div class="rounded-xl bg-red-100 p-3">
-
-                <x-lucide-heart class="w-5 h-5 text-red-500"/>
-
-            </div>
-
-            <div>
-
-                <p class="text-2xl font-bold text-gray-900">
-                    {{ method_exists($user,'likedPosts') ? $user->likedPosts()->count() : 0 }}
-                </p>
-
-                <p class="text-sm text-gray-500">
-                    Likes
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
 </div>
 
             {{-- ===================== --}}
