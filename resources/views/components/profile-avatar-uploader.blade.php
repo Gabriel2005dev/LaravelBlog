@@ -5,12 +5,12 @@
 ])
 
 <div class="flex justify-center mb-6">
-    <div class="relative w-40 h-40 transition-transform duration-200 hover:scale-105 group">
+    <div class="relative w-32 h-32 transition-transform duration-200 hover:scale-105 group">
 
         <x-user-avatar
             :user="$user"
             :id="$imageId"
-            size="w-40 h-40"
+            size="w-32 h-32"
         />
 
         <label

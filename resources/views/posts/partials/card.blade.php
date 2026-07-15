@@ -2,7 +2,7 @@
 
 @php
     $comments = $post->comments ?? collect();
-    $shareUrl = route('posts.show', $post);
+    $shareUrl = route('feed');
 
     $body = trim($post->body);
 

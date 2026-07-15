@@ -14,18 +14,19 @@ class PostController extends Controller
     public function index(): View
     {
         $posts = Post::with(['user', 'comments.user'])
-        ->withCount(['comments', 'likedByUsers as likes_count'])
-        ->withExists([
-            'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-            'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-        ])
-        ->latest()
-        ->paginate(10);
+            ->withCount(['comments', 'likedByUsers as likes_count'])
+            ->withExists([
+                'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+                'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
+            ])
+            ->latest()
+            ->paginate(10);
 
         return view('feed.index', compact('posts'));
     }
 
-        public function liked(): View
+
+    public function liked(): View
     {
         $posts = request()->user()->likedPosts()
             ->with(['user', 'comments.user'])
@@ -37,8 +38,12 @@ class PostController extends Controller
             ->latest('post_likes.created_at')
             ->paginate(10);
 
-        return view('feed.index', ['posts' => $posts, 'title' => 'Posts curtidos']);
+        return view('feed.index', [
+            'posts' => $posts,
+            'title' => 'Posts curtidos'
+        ]);
     }
+
 
     public function saved(): View
     {
@@ -52,61 +57,57 @@ class PostController extends Controller
             ->latest('saved_posts.created_at')
             ->paginate(10);
 
-        return view('feed.index', ['posts' => $posts, 'title' => 'Posts salvos']);
+        return view('feed.index', [
+            'posts' => $posts,
+            'title' => 'Posts salvos'
+        ]);
     }
 
-    public function create(): View
-    {
-        return view('posts.create');
-    }
 
     public function store(StorePostRequest $request): RedirectResponse
     {
-        $post = $request->user()->posts()->create([
+        $request->user()->posts()->create([
             ...$request->validated(),
-            'slug' => $this->uniqueSlug($request->string('title')->toString()),
+            'slug' => $this->uniqueSlug(
+                $request->string('title')->toString()
+            ),
         ]);
 
-        return redirect()->route('posts.show', $post)->with('status', 'Publicação criada com sucesso.');
+        return redirect()
+            ->route('feed')
+            ->with('status', 'Publicação criada com sucesso.');
     }
 
-    public function show(Post $post): View
-    {
-        $post->load(['user', 'comments.user'])
-        ->loadCount(['comments', 'likedByUsers as likes_count'])
-        ->loadExists([
-            'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-            'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-        ]);
-
-
-        return view('posts.show', compact('post'));
-    }
-
-    public function edit(Post $post): View
-    {
-        $this->authorize('update', $post);
-
-        return view('posts.edit', compact('post'));
-    }
 
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
+        $this->authorize('update', $post);
+
         $post->update([
             ...$request->validated(),
-            'slug' => $this->uniqueSlug($request->string('title')->toString(), $post),
+            'slug' => $this->uniqueSlug(
+                $request->string('title')->toString(),
+                $post
+            ),
         ]);
 
-        return redirect()->route('posts.show', $post)->with('status', 'Publicação atualizada com sucesso.');
+        return redirect()
+            ->route('feed')
+            ->with('status', 'Publicação atualizada com sucesso.');
     }
+
 
     public function destroy(Post $post): RedirectResponse
     {
         $this->authorize('delete', $post);
+
         $post->delete();
 
-        return redirect()->route('feed')->with('status', 'Publicação excluída com sucesso.');
+        return redirect()
+            ->route('feed')
+            ->with('status', 'Publicação excluída com sucesso.');
     }
+
 
     private function uniqueSlug(string $title, ?Post $ignore = null): string
     {
@@ -114,8 +115,15 @@ class PostController extends Controller
         $slug = $base;
         $counter = 2;
 
-        while (Post::where('slug', $slug)->when($ignore, fn ($query) => $query->whereKeyNot($ignore))->exists()) {
-            $slug = $base.'-'.$counter++;
+        while (
+            Post::where('slug', $slug)
+                ->when(
+                    $ignore,
+                    fn ($query) => $query->whereKeyNot($ignore)
+                )
+                ->exists()
+        ) {
+            $slug = $base . '-' . $counter++;
         }
 
         return $slug;
