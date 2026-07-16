@@ -41,6 +41,20 @@ class CommentTest extends TestCase
         ]);
     }
 
+    public function test_comment_store_returns_json_for_async_requests(): void
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('posts.comments.store', $post), [
+                'body' => 'Comentário via ajax.',
+            ])
+            ->assertCreated()
+            ->assertJsonPath('comment.body', 'Comentário via ajax.')
+            ->assertJsonPath('comments_count', 1);
+    }
+
     public function test_non_author_cannot_delete_comment_unless_post_author(): void
     {
         $comment = Comment::factory()->create();

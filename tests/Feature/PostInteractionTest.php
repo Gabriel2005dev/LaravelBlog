@@ -35,6 +35,33 @@ class PostInteractionTest extends TestCase
         $this->assertDatabaseMissing('saved_posts', ['post_id' => $post->id, 'user_id' => $user->id]);
     }
 
+    public function test_like_toggle_returns_json_for_async_requests(): void
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('posts.like.toggle', $post))
+            ->assertOk()
+            ->assertJson([
+                'liked' => true,
+                'likes_count' => 1,
+            ]);
+    }
+
+    public function test_save_toggle_returns_json_for_async_requests(): void
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('posts.save.toggle', $post))
+            ->assertOk()
+            ->assertJson([
+                'saved' => true,
+            ]);
+    }
+
     public function test_liked_and_saved_pages_show_only_related_posts_for_user(): void
     {
         $user = User::factory()->create();

@@ -34,10 +34,42 @@ if (mb_strlen($body) > $previewLength) {
 <article
     class="bg-white border border-gray-100 rounded overflow-hidden
            transition-all duration-300 shadow"
+    @comment-created.window="if ($event.detail.postId === {{ $post->id }}) commentsCount = $event.detail.commentsCount"
     x-data="{
         editing: {{ $errors->any() && old('post_id') == $post->id ? 'true' : 'false' }},
         shared: false,
         expandedText: false,
+        liking: false,
+        saving: false,
+        liked: @js((bool) $post->liked_by_current_user),
+        saved: @js((bool) $post->saved_by_current_user),
+        likesCount: @js($post->likes_count),
+        commentsCount: @js($post->comments_count),
+
+        async toggleLike() {
+            if (this.liking) return;
+            this.liking = true;
+
+            try {
+                const response = await window.axios.post(@js(route('posts.like.toggle', $post)));
+                this.liked = response.data.liked;
+                this.likesCount = response.data.likes_count;
+            } finally {
+                this.liking = false;
+            }
+        },
+
+        async toggleSave() {
+            if (this.saving) return;
+            this.saving = true;
+
+            try {
+                const response = await window.axios.post(@js(route('posts.save.toggle', $post)));
+                this.saved = response.data.saved;
+            } finally {
+                this.saving = false;
+            }
+        },
 
         async share() {
 
@@ -167,34 +199,29 @@ if (mb_strlen($body) > $previewLength) {
         <div class="flex items-center gap-2">
 
             {{-- LIKE --}}
-            <form method="POST" action="{{ route('posts.like.toggle', $post) }}">
-                @csrf
-
+            <div>
                 <button
-                    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition
-                    {{ $post->liked_by_current_user
-                        ? 'text-pink-600'
-                        : 'text-gray-600 hover:text-pink-600' }}">
+                    type="button"
+                    @click="toggleLike"
+                    :disabled="liking"
+                    class="group flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition"
+                    :class="liked ? 'text-pink-600' : 'text-gray-600 hover:text-pink-600'">
 
-                    @if($post->liked_by_current_user)
+                    <x-lucide-heart class="h-5 w-5 fill-current" x-show="liked" />
 
-                        <x-lucide-heart class="h-5 w-5 fill-current" />
-
-                    @else
-
+                    <span x-show="!liked" class="contents">
                         <x-lucide-heart
                             class="h-5 w-5 block group-hover:hidden transition-all duration-200" />
 
                         <x-lucide-heart-handshake
                             class="h-5 w-5 hidden group-hover:block transition-all duration-200" />
+                    </span>
 
-                    @endif
-
-                    <span>{{ $post->likes_count }}</span>
+                    <span x-text="likesCount"></span>
 
                 </button>
 
-            </form>
+            </div>
 
             {{-- COMMENTS --}}
             <button
@@ -211,7 +238,7 @@ if (mb_strlen($body) > $previewLength) {
                 <x-lucide-message-circle-more
                     class="h-5 w-5 hidden group-hover:block transition-all duration-200" />
 
-                <span>{{ $post->comments_count }}</span>
+                <span x-text="commentsCount"></span>
 
             </button>
 
@@ -235,38 +262,30 @@ if (mb_strlen($body) > $previewLength) {
 
         {{-- Grupo da direita --}}
         {{-- Grupo da direita --}}
-<form method="POST" action="{{ route('posts.save.toggle', $post) }}">
-    @csrf
-
+<div>
     <button
-        type="submit"
+        type="button"
+        @click="toggleSave"
+        :disabled="saving"
         class="group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-tl-2xl rounded-br-2xl transition-colors duration-200
-        {{ $post->saved_by_current_user
-            ? 'border-0'
-            : 'border border-gray-200 bg-white'
-        }}"
+        "
+        :class="saved ? 'border-0' : 'border border-gray-200 bg-white'"
     >
 
         {{-- Fundo --}}
         <span
             class="absolute inset-0 rounded-tl-2xl rounded-br-2xl bg-pink-600 transition-opacity duration-200
-            {{ $post->saved_by_current_user
-                ? 'opacity-100'
-                : 'opacity-0 group-hover:opacity-100'
-            }}"
+            "
+            :class="saved ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'"
         ></span>
 
-        @if ($post->saved_by_current_user)
-
-            <span class="relative z-10 flex h-5 w-5 items-center justify-center">
+        <span x-show="saved" class="relative z-10 flex h-5 w-5 items-center justify-center">
                 <x-lucide-bookmark-check
                     class="h-5 w-5 text-white stroke-[2.2]"
                 />
             </span>
 
-        @else
-
-            <span class="relative z-10 flex h-5 w-5 items-center justify-center">
+            <span x-show="!saved" class="relative z-10 flex h-5 w-5 items-center justify-center">
 
                 {{-- Ícone normal --}}
                 <x-lucide-bookmark
@@ -279,12 +298,9 @@ if (mb_strlen($body) > $previewLength) {
                 />
 
             </span>
-
-        @endif
-
     </button>
 
-</form>
+</div>
      
    
     </div>

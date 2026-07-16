@@ -197,6 +197,29 @@
 
         get isLimit() {
             return this.body.length >= this.max
+        },
+
+        async submitComment() {
+            if (this.sending || this.body.trim().length === 0 || ! this.post) return;
+
+            this.sending = true;
+
+            try {
+                const response = await window.axios.post(this.post.commentStoreUrl, {
+                    body: this.body.trim(),
+                });
+
+                this.post.comments.unshift(response.data.comment);
+                this.post.commentsCount = response.data.comments_count;
+                this.body = '';
+
+                this.$dispatch('comment-created', {
+                    postId: this.post.id,
+                    commentsCount: response.data.comments_count,
+                });
+            } finally {
+                this.sending = false;
+            }
         }
     }"
 >
@@ -206,7 +229,7 @@
             method="POST"
             :action="post.commentStoreUrl"
             class="flex items-start gap-3"
-            @submit="if (sending) { $event.preventDefault(); return; } sending = true"
+            @submit.prevent="submitComment"
         >
             @csrf
 
