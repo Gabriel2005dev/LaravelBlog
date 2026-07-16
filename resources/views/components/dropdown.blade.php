@@ -51,7 +51,7 @@
         class="absolute {{ $positionClasses }} {{ $alignmentClasses }} {{ $width }} z-[9999]"
         style="display: none;"
     >
-        <div class="overflow-hidder border rounded border-gray-200 bg-white {{ $contentClasses }}">
+        <div class="overflow-hidder shadow rounded-xl border-gray-200 bg-white {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>
