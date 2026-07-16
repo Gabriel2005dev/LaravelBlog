@@ -25,15 +25,30 @@
             </div>
 
             <div class="flex-1 lg:max-w-md">
-                <div class="relative">
-                    <x-lucide-search
-                        class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <form method="GET" action="{{ route('feed') }}" class="relative">
+                    <button
+                        type="submit"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-indigo-500"
+                        title="Pesquisar posts">
+                        <x-lucide-search class="h-5 w-5" />
+                    </button>
 
                     <input
-                        type="text"
+                        type="search"
+                        name="search"
+                        value="{{ $search ?? request('search') }}"
                         placeholder="Pesquisar posts..."
-                        class="w-full rounded-full border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-indigo-500 focus:ring-indigo-500">
-                </div>
+                        class="w-full rounded-full border-gray-300 py-2 pl-10 pr-10 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+
+                    @if (($search ?? request('search')) !== null && ($search ?? request('search')) !== '')
+                        <a
+                            href="{{ route('feed') }}"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-600"
+                            title="Limpar pesquisa">
+                            <x-lucide-x class="h-4 w-4" />
+                        </a>
+                    @endif
+                </form>
             </div>
 
             <a
@@ -63,6 +78,13 @@
                 </div>
             @endif
 
+            @if (($search ?? '') !== '')
+                <div class="rounded-full bg-indigo-50 px-4 py-3 text-sm text-indigo-700">
+                    Resultado da pesquisa por <strong>"{{ $search }}"</strong>.
+                    <a href="{{ route('feed') }}" class="font-semibold underline">Limpar</a>
+                </div>
+            @endif
+
             @forelse ($posts as $post)
                 @include('posts.partials.card', ['post' => $post])
             @empty
@@ -72,7 +94,11 @@
                     </h3>
 
                     <p class="mt-2 text-gray-600">
-                        Compartilhe uma publicação ou explore o feed do LaravelBlog.
+                        @if (($search ?? '') !== '')
+                            Tente pesquisar por outro termo ou limpe a pesquisa para voltar ao feed completo.
+                        @else
+                            Compartilhe uma publicação ou explore o feed do LaravelBlog.
+                        @endif
                     </p>
                 </div>
             @endforelse

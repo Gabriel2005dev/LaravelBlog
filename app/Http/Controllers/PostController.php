@@ -6,23 +6,36 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = trim($request->string('search')->toString());
+
         $posts = Post::with(['user', 'comments.user'])
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('body', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->withCount(['comments', 'likedByUsers as likes_count'])
             ->withExists([
                 'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
                 'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
             ])
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('feed.index', compact('posts'));
+        return view('feed.index', compact('posts', 'search'));
     }
 
 
