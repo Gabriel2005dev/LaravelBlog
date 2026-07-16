@@ -260,7 +260,7 @@ if (mb_strlen($body) > $previewLength) {
 
         </div>
 
-        {{-- Grupo da direita --}}
+
         {{-- Grupo da direita --}}
 <div>
     <button
@@ -293,7 +293,7 @@ if (mb_strlen($body) > $previewLength) {
                 />
 
                 {{-- Hover --}}
-                <x-lucide-bookmark-check
+                <x-lucide-bookmark
                     class="absolute h-5 w-5 scale-90 text-white opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100"
                 />
 

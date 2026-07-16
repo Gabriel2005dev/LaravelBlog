@@ -151,7 +151,7 @@
                             required
                             maxlength="255"
                             x-model="post.title"
-                            class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm
+                            class="mt-1 block w-full rounded-full border-gray-300 shadow-sm
                                    focus:border-pink-600 focus:ring-pink-600
                                    dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
                         />
@@ -173,7 +173,7 @@
                                 x-model="post.body"
                                 @input="if (post.body.length > max) post.body = post.body.slice(0, max)"
                                 placeholder="Compartilhe uma ideia, atualização ou aprendizado..."
-                                class="w-full resize-none rounded-xl border p-4 pb-10 pr-12 text-sm shadow-sm
+                                class="w-full resize-none rounded-3xl border p-4 pb-10 pr-12 text-sm shadow-sm
                                        transition focus:outline-none focus:ring-pink-600 focus:border-pink-600
                                        dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
                                 :class="isLimit
@@ -192,7 +192,7 @@
                             {{-- SUBMIT --}}
                             <button
                                 type="submit"
-                                class="absolute bottom-3 right-1.5 flex h-8 w-8 items-center justify-center
+                                class="absolute bottom-4 right-2 flex h-8 w-8 items-center justify-center
                                        rounded-full bg-pink-600 text-white transition hover:scale-105"
                                 title="Salvar"
                             >

@@ -51,7 +51,7 @@
         x-show="commentsDrawer"
         x-transition.opacity
         @click="commentsDrawer = false"
-        class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        class="absolute inset-0 bg-pink/50 backdrop-blur-sm"
     ></div>
 
     {{-- Drawer --}}
@@ -75,7 +75,7 @@
 
                     <button
                         @click="commentsDrawer = false"
-                        class="rounded-full p-2 transition hover:bg-gray-100 dark:hover:bg-zinc-800"
+                        class="rounded-full p-2 transition hover:text-pink-600 hover:bg-pink-100 dark:hover:bg-zinc-800"
                     >
                         <x-lucide-arrow-left class="h-5 w-5"/>
                     </button>
@@ -252,7 +252,7 @@
                     x-model="body"
                     @input="if (body.length > max) body = body.slice(0, max)"
                     placeholder="Escreva um comentário..."
-                    class="w-full resize-none rounded-xl border pb-8 pr-14 pt-3 text-sm transition
+                    class="w-full resize-none rounded-3xl border pb-8 pr-14 pt-3 text-sm transition
                         focus:outline-none focus:ring-pink-600 focus:border-pink-600"
                     :class="isLimit
                         ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
@@ -272,7 +272,7 @@
                 <button
                     type="submit"
                     :disabled="sending || body.trim().length === 0"
-                    class="absolute bottom-3 right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-pink-600 text-white transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+                    class="absolute bottom-4 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-pink-600 text-white transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
                     :title="sending ? 'Enviando comentário' : 'Enviar comentário'"
                 >
                     <x-lucide-send class="h-4 w-4" x-show="!sending" />
