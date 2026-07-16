@@ -1,9 +1,8 @@
-<x-app-layout
->
+<x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
-            <div class="flex items-center">
+            <div class="flex flex-wrap items-center gap-2">
                 <a href="{{ route('posts.liked.index') }}"
                     class="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold {{ request()->routeIs('posts.liked.index') ? 'bg-red-50 text-red-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
                     <x-lucide-heart class="h-5 w-5" />
@@ -24,7 +23,7 @@
                 </a>
             </div>
 
-            <div class="flex-1 lg:max-w-md">
+            <div class="w-full flex-1 lg:max-w-md">
                 <form method="GET" action="{{ route('feed') }}" class="relative">
                     <button
                         type="submit"
@@ -70,16 +69,15 @@
     </x-slot>
 
     <div id="feed">
-        <div class="mx-auto items-center max-w-6xl space-y-3">
-
+        <div class="mx-auto max-w-6xl space-y-3 px-3 sm:px-4 lg:px-0">
             @if (session('status'))
-                <div class="rounded-full bg-green-50 p-4 text-sm text-green-700">
+                <div class="rounded-2xl bg-green-50 p-4 text-sm text-green-700 sm:rounded-full">
                     {{ session('status') }}
                 </div>
             @endif
 
             @if (($search ?? '') !== '')
-                <div class="rounded-full bg-indigo-50 px-4 py-3 text-sm text-indigo-700">
+                <div class="rounded-2xl bg-indigo-50 px-4 py-3 text-sm text-indigo-700 sm:rounded-full">
                     Resultado da pesquisa por <strong>"{{ $search }}"</strong>.
                     <a href="{{ route('feed') }}" class="font-semibold underline">Limpar</a>
                 </div>
@@ -88,7 +86,7 @@
             @forelse ($posts as $post)
                 @include('posts.partials.card', ['post' => $post])
             @empty
-                <div class="rounded-full bg-white p-8 text-center shadow-sm ring-1 ring-gray-100">
+                <div class="rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-gray-100">
                     <h3 class="text-lg font-semibold text-gray-900">
                         Nenhum post encontrado
                     </h3>
@@ -108,7 +106,6 @@
         </div>
     </div>
 
-    {{-- Drawers --}}
     <x-posts.drawer :posts="$posts" />
     <x-comments.drawer :posts="$posts" />
     

@@ -15,7 +15,7 @@
 
         <label
             for="{{ $inputId }}"
-            class="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100 cursor-pointer"
+            class="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100 focus-within:opacity-100"
             aria-label="{{ __('Alterar avatar') }}"
         >
 
@@ -23,7 +23,8 @@
                 type="file"
                 id="{{ $inputId }}"
                 class="hidden"
-                accept="image/*"
+                name="avatar"
+                accept="image/jpeg,image/png,image/webp"
             >
 
             <x-lucide-pencil class="w-6 h-6 text-white" />

@@ -7,7 +7,6 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,47 +25,27 @@
             commentsDrawer: false,
             selectedPost: null
         }"
-        class="min-h-screen bg-gray-100">
+        class="min-h-screen overflow-x-hidden bg-gray-100">
 
             @include('layouts.navigation')
 
-            <!-- Page Content -->
-            <main class="min-h-screen pt-20 transition-all duration-300">
+            <main class="min-h-screen pb-24 pt-20 transition-all duration-300 lg:pb-0">
                 <div>
                     {{ $slot }}
                 </div>
             </main>
         </div>
         <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('user', {
-                   avatar: @js(Auth::check()
-                    ? (Auth::user()->avatar
-                        ? asset('storage/' . Auth::user()->avatar)
-                        : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name))
-                    : null
-                )
+            document.addEventListener('alpine:init', () => {
+                Alpine.store('user', {
+                    avatar: @js(Auth::check()
+                        ? (Auth::user()->avatar
+                            ? asset('storage/' . Auth::user()->avatar)
+                            : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name))
+                        : null
+                    )
+                })
             })
-        })
         </script>
-        <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('comments', {
-                open: false,
-                postId: null,
-
-                open(id) {
-                    this.postId = id
-                    this.open = true
-                },
-
-                close() {
-                    this.open = false
-                    this.postId = null
-                }
-            })
-        })
-        </script>
-
     </body>
 </html>

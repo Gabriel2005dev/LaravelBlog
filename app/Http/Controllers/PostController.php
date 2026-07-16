@@ -16,44 +16,26 @@ class PostController extends Controller
     {
         $search = trim($request->string('search')->toString());
 
-        $posts = Post::with(['user', 'comments.user'])
-            ->when($search !== '', function ($query) use ($search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('title', 'like', "%{$search}%")
-                        ->orWhere('body', 'like', "%{$search}%")
-                        ->orWhereHas('user', function ($query) use ($search) {
-                            $query->where('name', 'like', "%{$search}%");
-                        });
-                });
-            })
-            ->withCount(['comments', 'likedByUsers as likes_count'])
-            ->withExists([
-                'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-                'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-            ])
+        $posts = Post::query()
+            ->forFeed($request->user()->id)
+            ->search($search)
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
         return view('feed.index', compact('posts', 'search'));
     }
-
-
     public function liked(): View
     {
         $posts = request()->user()->likedPosts()
-            ->with(['user', 'comments.user'])
-            ->withCount(['comments', 'likedByUsers as likes_count'])
-            ->withExists([
-                'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-                'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-            ])
+            ->forFeed(request()->user()->id)
             ->latest('post_likes.created_at')
             ->paginate(10);
 
         return view('feed.index', [
             'posts' => $posts,
-            'title' => 'Posts curtidos'
+            'title' => 'Posts curtidos',
+            'search' => '',
         ]);
     }
 
@@ -61,18 +43,14 @@ class PostController extends Controller
     public function saved(): View
     {
         $posts = request()->user()->savedPosts()
-            ->with(['user', 'comments.user'])
-            ->withCount(['comments', 'likedByUsers as likes_count'])
-            ->withExists([
-                'likedByUsers as liked_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-                'savedByUsers as saved_by_current_user' => fn ($query) => $query->whereKey(auth()->id()),
-            ])
+            ->forFeed(request()->user()->id)
             ->latest('saved_posts.created_at')
             ->paginate(10);
 
         return view('feed.index', [
             'posts' => $posts,
-            'title' => 'Posts salvos'
+            'title' => 'Posts salvos',
+            'search' => '',
         ]);
     }
 
@@ -136,7 +114,7 @@ class PostController extends Controller
                 )
                 ->exists()
         ) {
-            $slug = $base . '-' . $counter++;
+            $slug = $base.'-'.$counter++;
         }
 
         return $slug;

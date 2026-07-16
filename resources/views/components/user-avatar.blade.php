@@ -1,5 +1,4 @@
-<div>
-     @props([
+@props([
     'user' => null,
     'id' => null,
     'size' => 'w-9 h-9',
@@ -9,6 +8,7 @@
 @php
     $avatar = data_get($user, 'avatar');
     $name = data_get($user, 'name', __('Usuário'));
+
     $avatarUrl = $avatar
         ? asset('storage/' . $avatar)
         : 'https://ui-avatars.com/api/?name=' . urlencode($name);
@@ -18,7 +18,8 @@
     @if ($id) id="{{ $id }}" @endif
     src="{{ $avatarUrl }}"
     alt="{{ $alt ?? __('Avatar de :name', ['name' => $name]) }}"
-        data-user-avatar="{{ data_get($user, 'id') }}"
-    {{ $attributes->merge(['class' => $size . ' rounded-full object-cover border']) }}
+    data-user-avatar="{{ data_get($user, 'id') }}"
+    {{ $attributes->merge([
+        'class' => $size . ' block aspect-square rounded-full object-cover border'
+    ]) }}
 />
-</div>

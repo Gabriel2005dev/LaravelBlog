@@ -1,5 +1,4 @@
 <section>
-
     <header>
         <h2 class="text-lg font-medium text-gray-900">
             Informações do Perfil
@@ -10,71 +9,57 @@
         </p>
     </header>
 
-    <div class="flex flex-col items-center mt-4">
-
-        {{-- Avatar --}}
+    <div class="mt-4 flex flex-col items-center">
         <div class="flex justify-center">
             <x-profile-avatar-uploader :user="$user" />
         </div>
 
-        {{-- Informações do usuário --}}
-        <div class="text-center mt-2">
+        <div class="mt-2 text-center">
 
             <h2 class="text-xl font-bold text-gray-900">
                 {{ $user->name }}
             </h2>
 
-            <p class="text-sm text-gray-500 break-all mt-1">
-                {{ $user->email }}
+            <p class="mt-1 break-all text-sm text-gray-500">                {{ $user->email }}
             </p>
 
         </div>
 
-        {{-- Estatísticas --}}
-        <div class="flex items-center justify-center gap-4 mt-4">
-
-            {{-- Posts --}}
+        <div class="mt-4 flex items-center justify-center gap-4">
             <div class="flex flex-col items-center">
 
                 <div class="rounded-tl-2xl rounded-br-2xl bg-pink-900 p-3">
-                    <x-lucide-file-text class="w-5 h-5 text-white"/>
+                    <x-lucide-file-text class="w-5 h-5 text-white" />
                 </div>
 
                 <span class="mt-1 text-lg font-bold text-gray-900">
-                    {{ method_exists($user,'posts') ? $user->posts()->count() : 0 }}
+                    {{ $user->posts_count ?? 0 }}
                 </span>
-
-             
 
             </div>
 
-            {{-- Comentários --}}
             <div class="flex flex-col items-center">
 
                 <div class="rounded-tl-2xl rounded-br-2xl bg-blue-900 p-3">
-                    <x-lucide-message-circle class="w-5 h-5 text-white"/>
+                    <x-lucide-message-circle class="w-5 h-5 text-white" />
                 </div>
 
                 <span class="mt-1 text-lg font-bold text-gray-900">
-                    {{ method_exists($user,'comments') ? $user->comments()->count() : 0 }}
+                    {{ $user->comments_count ?? 0 }}
                 </span>
-
-              
-
             </div>
 
-            {{-- Curtidas --}}
+            
             <div class="flex flex-col items-center">
 
                 <div class="rounded-tl-2xl rounded-br-2xl bg-red-900 p-3">
-                    <x-lucide-heart class="w-5 h-5 text-white"/>
+                    <x-lucide-heart class="w-5 h-5 text-white" />
                 </div>
 
                 <span class="mt-1 text-lg font-bold text-red-900">
-                    {{ method_exists($user,'likedPosts') ? $user->likedPosts()->count() : 0 }}
+                    {{ $user->liked_posts_count ?? 0 }}
                 </span>
 
-                
             </div>
 
         </div>
@@ -84,6 +69,7 @@
 </section>
 
 <script>
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const input = document.getElementById('avatarInput');
@@ -113,9 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const response = await fetch("{{ route('profile.avatar') }}", {
                 method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                },
+                headers: { Accept: 'application/json' },
                 body: formData,
             });
 
@@ -138,9 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
         } catch (error) {
-
             console.error(error);
-
             alert('Não foi possível atualizar sua foto de perfil.');
 
         } finally {
@@ -152,6 +134,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     });
-
 });
 </script>

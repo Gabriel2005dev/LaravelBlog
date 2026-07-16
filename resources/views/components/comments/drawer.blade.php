@@ -43,16 +43,14 @@
     x-show="commentsDrawer"
     x-cloak
     @keydown.escape.window="commentsDrawer = false"
-    class="fixed inset-0 z-[100] flex justify-end"
->
+    class="fixed inset-0 z-[100] flex justify-end" role="dialog" aria-modal="true">
 
     {{-- Overlay --}}
     <div
         x-show="commentsDrawer"
         x-transition.opacity
         @click="commentsDrawer = false"
-        class="absolute inset-0 bg-pink/50 backdrop-blur-sm"
-    ></div>
+        class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
     {{-- Drawer --}}
     <aside
@@ -63,17 +61,17 @@
         x-transition:leave="transform transition ease-in duration-200"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
-        class="relative flex h-screen w-full max-w-xl flex-col overflow-x-hidden bg-white shadow-2xl dark:bg-zinc-900"
+        class="relative flex h-dvh w-full max-w-xl sm:h-screen flex-col overflow-x-hidden bg-white shadow-2xl dark:bg-zinc-900"
     >
 
         {{-- HEADER --}}
         <header class="sticky top-0 z-20 bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/90">
 
-            <div class="flex items-center justify-between px-6 py-4">
-
+            <div class="flex items-center justify-between px-4 py-4 sm:px-6">
                 <div class="flex items-center gap-3">
 
                     <button
+                        type="button"
                         @click="commentsDrawer = false"
                         class="rounded-full p-2 transition hover:text-pink-600 hover:bg-pink-100 dark:hover:bg-zinc-800"
                     >
@@ -101,11 +99,7 @@
       
 
             {{-- POST --}}
-            <section
-            
-            
-            class="p-6">
-
+            <section class="p-4 sm:p-6">
                 <div class="flex gap-4">
 
                     <img :src="post.authorAvatar" :alt="`Avatar de ${post.authorName}`" class="h-11 w-11 rounded-full border object-cover">
@@ -133,7 +127,7 @@
             </section>
 
             {{-- COMMENTS --}}
-            <section class="p-6">
+            <section class="p-4 sm:p-6">
                 <template x-if="post.comments.length === 0">
                     <p class="rounded bg-gray-50 p-5 text-center text-sm text-gray-500 dark:bg-zinc-800 dark:text-zinc-300">
                         Ainda não há comentários. Seja a primeira pessoa a comentar.
@@ -157,7 +151,7 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button class="text-gray-400 transition hover:text-red-600" title="Excluir comentário">
+                                    <button type="submit" class="text-gray-400 transition hover:text-red-600" title="Excluir comentário" aria-label="Excluir comentário">
                                         <x-lucide-trash-2 class="h-4 w-4" />
                                     </button>
                                 </form>
@@ -184,9 +178,9 @@
 
         {{-- FOOTER --}}
         <template x-if="post">
-       <footer
-    class="border-t bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
-    x-data="{
+       <footer class="sticky bottom-0 border-t bg-white p-3 sm:p-5 dark:border-zinc-800 dark:bg-zinc-900"
+
+        x-data="{
         sending: false,
         body: @js(old('body', '')),
         max: 400,

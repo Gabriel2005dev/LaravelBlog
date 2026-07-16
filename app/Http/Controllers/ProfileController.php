@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UpdateAvatarRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,19 +14,13 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = $request->user()->loadCount(['posts', 'comments', 'likedPosts']);
+
+        return view('profile.edit', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
@@ -40,10 +36,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
             
-
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -51,10 +43,14 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+        $avatar = $user->avatar;
 
         Auth::logout();
-
         $user->delete();
+
+        if ($avatar) {
+            Storage::disk('public')->delete($avatar);
+        }
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -62,25 +58,20 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function updateAvatar(Request $request)
-   {
-    $request->validate([
-        'avatar' => ['required', 'image', 'max:2048'],
-    ]);
+    public function updateAvatar(UpdateAvatarRequest $request): JsonResponse
+    {
+        $user = $request->user();
+        $oldAvatar = $user->avatar;
+        $path = $request->file('avatar')->store('avatars', 'public');
 
-    $user = $request->user();
-    $oldAvatar = $user->avatar;
+        $user->forceFill(['avatar' => $path])->save();
 
-    $path = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar = $path;
-        $user->save();
-
-           if ($oldAvatar) {
+    if ($oldAvatar && $oldAvatar !== $path) {
             Storage::disk('public')->delete($oldAvatar);
         }
 
-          return response()->json([
-            'avatar_url' => asset('storage/' . $path),
+        return response()->json([
+        'avatar_url' => asset('storage/'.$path),
         ]);
     }
 }
