@@ -9,10 +9,17 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libpq-dev \
     nodejs \
-    npm
-
-RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd
+    npm \
+    && docker-php-ext-install \
+        pdo_mysql \
+        pdo_pgsql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -27,6 +34,8 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 RUN php artisan storage:link || true
 
+RUN a2enmod rewrite
+
 EXPOSE 80
 
-CMD php artisan migrate --force && apache2-foreground
+CMD ["apache2-foreground"]
