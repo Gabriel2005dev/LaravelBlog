@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y \
         bcmath \
         gd
 
+RUN a2enmod rewrite
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . .
@@ -33,8 +35,6 @@ RUN npm run build
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 RUN php artisan storage:link || true
-
-RUN a2enmod rewrite
 
 EXPOSE 80
 
