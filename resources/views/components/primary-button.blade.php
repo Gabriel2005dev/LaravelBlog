@@ -6,6 +6,6 @@
 >
     <span class="inline-flex items-center gap-2 transition-transform duration-300 group-hover:-translate-y-0.5">
         {{ $slot }}
-        <x-lucide-mouse-pointer class="w-4 h-4" />
+        <x-lucide-send-horizontal class="w-4 h-4" />
     </span>
 </button>
