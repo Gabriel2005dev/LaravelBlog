@@ -28,7 +28,7 @@
         <div class="mt-4 flex items-center justify-center gap-4">
             <div class="flex flex-col items-center">
 
-                <div class="rounded-tl-2xl rounded-br-2xl bg-pink-900 p-2">
+                <div class="rounded-tl-2xl rounded-br-2xl bg-pink-900 p-3">
                     <x-lucide-file-text class="w-5 h-5 text-white" />
                 </div>
 
@@ -40,7 +40,7 @@
 
             <div class="flex flex-col items-center">
 
-                <div class="rounded-tl-2xl rounded-br-2xl bg-blue-900 p-2">
+                <div class="rounded-tl-2xl rounded-br-2xl bg-blue-900 p-3">
                     <x-lucide-message-circle class="w-5 h-5 text-white" />
                 </div>
 
@@ -52,7 +52,7 @@
             
             <div class="flex flex-col items-center">
 
-                <div class="rounded-tl-2xl rounded-br-2xl bg-red-900 p-2">
+                <div class="rounded-tl-2xl rounded-br-2xl bg-red-900 p-3">
                     <x-lucide-heart class="w-5 h-5 text-white" />
                 </div>
 
