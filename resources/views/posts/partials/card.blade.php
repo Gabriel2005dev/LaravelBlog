@@ -199,7 +199,7 @@
                     <x-lucide-heart-handshake class="hidden h-5 w-5 group-hover:block" />
                 </span>
 
-                <span class="hidden sm:inline" x-text="likesCount"></span>
+                <span  x-text="likesCount"></span>
 
             </button>
 
@@ -216,7 +216,7 @@
 
                 <x-lucide-message-circle-more class="hidden h-5 w-5 group-hover:block" />
 
-                <span class="hidden sm:inline" x-text="commentsCount"></span>
+                <span x-text="commentsCount"></span>
 
             </button>
 
