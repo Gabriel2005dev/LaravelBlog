@@ -69,42 +69,49 @@
     </x-slot>
 
     <div id="feed">
-        <div class="mx-auto max-w-6xl space-y-3 px-3 sm:px-4 lg:px-0">
-            @if (session('status'))
-                <div class="rounded-2xl bg-green-50 p-4 text-sm text-green-700 sm:rounded-full">
-                    {{ session('status') }}
-                </div>
-            @endif
+    <div class="mx-auto max-w-6xl px-3 sm:px-4 lg:px-0">
 
-            @if (($search ?? '') !== '')
-                <div class="rounded-2xl bg-indigo-50 px-4 py-3 text-sm text-indigo-700 sm:rounded-full">
-                    Resultado da pesquisa por <strong>"{{ $search }}"</strong>.
-                    <a href="{{ route('feed') }}" class="font-semibold underline">Limpar</a>
-                </div>
-            @endif
+        @if (session('status'))
+            <div class="mb-5 rounded-2xl bg-green-50 p-4 text-sm text-green-700 sm:rounded-full">
+                {{ session('status') }}
+            </div>
+        @endif
 
-            @forelse ($posts as $post)
+        @if (($search ?? '') !== '')
+            <div class="mb-5 rounded-2xl bg-indigo-50 px-4 py-3 text-sm text-indigo-700 sm:rounded-full">
+                Resultado da pesquisa por <strong>"{{ $search }}"</strong>.
+                <a href="{{ route('feed') }}" class="font-semibold underline">
+                    Limpar
+                </a>
+            </div>
+        @endif
+
+        @forelse ($posts as $post)
+            <div class="mb-3 sm:mb-3">
                 @include('posts.partials.card', ['post' => $post])
-            @empty
-                <div class="rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        Nenhum post encontrado
-                    </h3>
+            </div>
+        @empty
 
-                    <p class="mt-2 text-gray-600">
-                        @if (($search ?? '') !== '')
-                            Tente pesquisar por outro termo ou limpe a pesquisa para voltar ao feed completo.
-                        @else
-                            Compartilhe uma publicação ou explore o feed do LaravelBlog.
-                        @endif
-                    </p>
-                </div>
-            @endforelse
+            <div class="rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Nenhum post encontrado
+                </h3>
 
-            {{ $posts->links() }}
+                <p class="mt-2 text-gray-600">
+                    @if (($search ?? '') !== '')
+                        Tente pesquisar por outro termo ou limpe a pesquisa para voltar ao feed completo.
+                    @else
+                        Compartilhe uma publicação ou explore o feed do LaravelBlog.
+                    @endif
+                </p>
+            </div>
 
-        </div>
+        @endforelse
+
+        {{ $posts->links() }}
+
     </div>
+</div>
 
     <x-posts.drawer :posts="$posts" />
     <x-comments.drawer :posts="$posts" />

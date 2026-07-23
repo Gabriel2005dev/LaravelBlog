@@ -185,7 +185,7 @@
                 @click="toggleLike"
                 :disabled="liking"
                 class="group flex h-10 items-center justify-center gap-1 rounded-full px-2 text-sm transition disabled:cursor-not-allowed disabled:opacity-60 sm:h-11 sm:px-3"
-                :class="liked ? 'text-pink-600' : 'text-gray-600 hover:text-pink-600'"
+                :class="liked ? 'text-red-600' : 'text-gray-600 hover:text-red-600'"
                 aria-label="Curtir publicação"
             >
 
